@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>About Us — Prestige Paving Solutions</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --bg: #f3f6fa;
+    --bg-elev: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-hov: #e6f2fc;
+    --line: rgba(10,14,20,0.09);
+    --line-strong: rgba(10,14,20,0.15);
+    --ink: #0a0e14;
+    --ink-dim: rgba(10,14,20,0.65);
+    --ink-faint: rgba(10,14,20,0.42);
+    --accent: #0080e0;
+    --accent-bright: #38a5f5;
+    --accent-deep: #005aaa;
+    --display: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --sans: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --mono: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --rad: 10px;
+    --rad-lg: 16px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; }
+  .container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 720px) { .container { padding: 0 20px; } }
+
+  /* Nav */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+    background: color-mix(in oklab, var(--bg) 80%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px; padding: 0 32px;
+    max-width: 1240px; margin: 0 auto;
+  }
+  .brand-logo { height: 56px; width: auto; display: block; object-fit: contain; }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 500; color: var(--ink-dim);
+    transition: color .2s;
+  }
+  .nav-back:hover { color: var(--ink); }
+  .nav-phone-link {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 500; color: var(--ink-dim);
+    padding: 9px 18px; border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    transition: border-color .2s, color .2s;
+  }
+  .nav-phone-link:hover { color: var(--ink); border-color: rgba(255,255,255,0.3); }
+  .nav-phone-link svg { color: var(--accent-bright); }
+
+  /* Hero */
+  .about-hero {
+    padding-top: 72px;
+    position: relative;
+    min-height: 70vh;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+  }
+  .about-hero-img {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 90% 70% at 50% 0%, color-mix(in oklab, var(--accent) 22%, transparent) 0%, transparent 65%),
+      var(--bg);
+  }
+  .about-hero-veil {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg,
+      rgba(10,11,13,0.35) 0%,
+      rgba(10,11,13,0.1) 30%,
+      rgba(10,11,13,0.6) 70%,
+      rgba(10,11,13,1) 100%);
+  }
+  .about-hero-content {
+    position: relative; z-index: 1;
+    padding: 80px 32px 72px;
+    max-width: 1240px; margin: 0 auto; width: 100%;
+  }
+  .about-hero-eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent-bright);
+    margin-bottom: 18px; display: block;
+  }
+  .about-hero-title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(48px, 7vw, 96px); line-height: 0.96;
+    letter-spacing: -0.025em; margin: 0;
+    color: var(--ink);
+  }
+  .about-hero-title em {
+    font-style: italic; color: var(--accent-bright);
+  }
+
+  /* Content sections */
+  .about-body { padding: 0 0 120px; }
+  .about-section {
+    border-top: 1px solid var(--line);
+    padding: 80px 0;
+  }
+  .about-section-inner {
+    max-width: 1240px; margin: 0 auto; padding: 0 32px;
+    display: grid; grid-template-columns: 280px 1fr; gap: 80px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .about-section-inner { grid-template-columns: 1fr; gap: 28px; }
+  }
+  @media (max-width: 720px) {
+    .about-section-inner { padding: 0 20px; }
+    .about-hero-content { padding: 60px 20px 56px; }
+  }
+  .about-section-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-faint);
+    padding-top: 6px;
+  }
+  .about-section-body { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+  .about-section-body h2 {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(28px, 3.5vw, 42px); line-height: 1.08;
+    letter-spacing: -0.02em; margin: 0 0 4px;
+    color: var(--ink);
+  }
+  .about-section-body h2 em { font-style: italic; color: var(--accent-bright); }
+  .about-section-body p {
+    font-size: 17px; line-height: 1.7; color: var(--ink-dim); margin: 0;
+  }
+
+  /* Credential cards */
+  .cred-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 8px;
+    width: 100%;
+    max-width: 100%;
+    align-items: stretch;
+  }
+  .cred-card {
+    padding: 28px 28px;
+    background: var(--bg-elev);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--rad-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .cred-card img {
+    max-height: 72px;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin-inline: auto;
+  }
+  .cred-card-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+    width: 100%;
+    min-width: 0;
+    transition: opacity .2s ease;
+  }
+  .cred-card-link:hover { opacity: 0.92; }
+  .cred-card-link:focus-visible {
+    outline: 2px solid var(--accent-bright);
+    outline-offset: 4px;
+    border-radius: 10px;
+  }
+  @media (max-width: 560px) {
+    .cred-grid { gap: 10px; }
+    .cred-card { padding: 18px 12px; min-height: 96px; }
+    .cred-card img { max-height: clamp(52px, 16vw, 72px); }
+  }
+  @media (max-width: 360px) {
+    .cred-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      max-width: 320px;
+      margin-inline: auto;
+    }
+    .cred-card img { max-height: 72px; }
+  }
+
+  /* Footer */
+  .footer { border-top: 1px solid var(--line); padding: 60px 0 40px; background: var(--bg); overflow-x: clip; }
+  .footer-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+  .footer-row > div { min-width: 0; }
+  @media (max-width: 860px) { .footer-row { grid-template-columns: 1fr 1fr; gap: 36px; } }
+  .footer h5 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-faint); font-family: var(--mono); margin: 0 0 16px; font-weight: 500; }
+  .footer ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .footer ul li { min-width: 0; }
+  .footer ul a {
+    color: var(--ink-dim); font-size: 14px; transition: color .2s;
+    display: inline-block; max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .footer ul a:hover { color: var(--accent-bright); }
+  .footer-email { line-height: 1.45; word-break: normal; overflow-wrap: normal; }
+  .footer-email-domain { display: block; }
+  @media (min-width: 520px) { .footer-email-domain { display: inline; } }
+  @media (max-width: 860px) { .footer-email { font-size: 12.5px; } }
+  .footer-bottom {
+    border-top: 1px solid var(--line); padding-top: 24px;
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-size: 12px; color: var(--ink-faint);
+    min-width: 0;
+  }
+  .footer-bottom span { min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
+  .footer-tag { font-family: var(--display); font-size: 19px; line-height: 1.4; max-width: 320px; color: var(--ink-dim); }
+  .footer-tag em { color: var(--accent-bright); font-style: italic; }
+
+  /* Call bar — matches home page */
+  .call-bar {
+    position: fixed; bottom: 16px; left: 50%;
+    transform: translate(-50%, 120%);
+    display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 12px;
+    padding: 10px 18px;
+    background: var(--bg-elev);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    box-shadow: 0 20px 60px -10px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03) inset;
+    backdrop-filter: blur(16px);
+    z-index: 40;
+    transition: transform .5s cubic-bezier(.2,.8,.2,1);
+    font-size: 14px; font-family: var(--sans);
+  }
+  .call-bar.visible { transform: translate(-50%, 0); }
+  .call-bar-text {
+    color: var(--ink); font-weight: 500; font-size: 14px;
+    line-height: 1.25;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .call-bar-num { color: var(--ink-dim); font-weight: 500; font-size: 14px; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px; border-radius: 999px;
+    background: linear-gradient(180deg, var(--accent-bright) 0%, var(--accent) 60%, var(--accent-deep) 100%);
+    color: #fff;
+    font-family: var(--sans); font-weight: 800; font-size: 13px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    border: none; cursor: pointer;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 -1px 0 rgba(0,0,0,0.2) inset, 0 8px 24px -8px var(--accent-glow);
+    transition: transform .22s ease, box-shadow .22s ease;
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.55) inset, 0 -1px 0 rgba(0,0,0,0.2) inset, 0 14px 32px -8px var(--accent-glow);
+  }
+  @media (max-width: 560px) {
+    .call-bar {
+      left: 50%;
+      right: auto;
+      transform: translate(-50%, 120%);
+      width: fit-content;
+      max-width: calc(100vw - 32px);
+      padding: 10px 14px;
+      gap: 10px;
+      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    }
+    .call-bar-text { font-size: 13px; }
+    .call-bar .btn-primary {
+      padding: 8px 12px;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .call-bar.visible { transform: translate(-50%, 0); }
+    .call-bar-num { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html">
+      <img src="media/prestige-paving-logo.png" alt="Prestige Paving Solutions" class="brand-logo" />
+    </a>
+    <div class="nav-right">
+      <a class="nav-back" href="index.html">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        Back to Home
+      </a>
+      <a class="nav-phone-link" href="tel:19052616800">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 3h3l1.5 4-2 1.2a9 9 0 004.3 4.3L11 10.5 15 12v3a1 1 0 01-1 1A12 12 0 012 4a1 1 0 011-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        (905) 261-6800
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="about-hero">
+  <div class="about-hero-img"></div>
+  <div class="about-hero-veil"></div>
+  <div class="about-hero-content">
+    <span class="about-hero-eyebrow">— Prestige Paving Solutions</span>
+    <h1 class="about-hero-title">About <em>Us</em></h1>
+  </div>
+</section>
+
+<!-- Body -->
+<div class="about-body">
+
+  <!-- Mission -->
+  <section class="about-section">
+    <div class="about-section-inner">
+      <span class="about-section-label">Our Mission</span>
+      <div class="about-section-body">
+        <h2>Driveways Done <em>Right</em>, Every Time</h2>
+        <p>Our mission is to deliver dependable, high-quality driveway sealing and paving tailored to residential and commercial properties across the GTA. Through clear communication, premium materials, and workmanship we stand behind, we build lasting relationships and ensure every project is completed with excellence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="about-section">
+    <div class="about-section-inner">
+      <span class="about-section-label">What We Do</span>
+      <div class="about-section-body">
+        <h2>Sealing, Paving &amp; <em>Repair</em></h2>
+        <p>Prestige Paving Solutions specializes in protecting and restoring asphalt driveways. From routine sealing that guards against Ontario winters to full resurfacing and crack repair, we focus on honest recommendations — sealing when it's enough, paving when it's truly needed.</p>
+        <p>We serve homeowners, townhomes, condos, and commercial properties throughout the Greater Toronto Area with free on-site quotes and fully insured crews.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why us -->
+  <section class="about-section">
+    <div class="about-section-inner">
+      <span class="about-section-label">Why Choose Us</span>
+      <div class="about-section-body">
+        <h2>Built on <em>Trust</em> &amp; Quality</h2>
+        <p>Prestige Paving Solutions was built on a simple belief: your driveway should look great and hold up to Canadian weather. We use commercial-grade sealers and proven paving practices, leave every site clean, and put pricing in writing before work begins.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-row">
+      <div>
+        <a href="index.html" style="display:inline-block; margin-bottom:18px;">
+          <img src="media/prestige-paving-logo.png" alt="Prestige Paving Solutions" class="brand-logo" />
+        </a>
+        <p class="footer-tag">Driveway sealing and paving in the GTA — <em>curb appeal that lasts.</em></p>
+      </div>
+      <div>
+        <h5>Services</h5>
+        <ul>
+          <li><a href="index.html#services">Driveway sealing</a></li>
+          <li><a href="index.html#services">Asphalt paving</a></li>
+          <li><a href="index.html#services">Crack filling</a></li>
+          <li><a href="index.html#services">Commercial lots</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Service area</h5>
+        <ul>
+          <li><a href="#">Toronto</a></li>
+          <li><a href="#">Mississauga</a></li>
+          <li><a href="#">Brampton</a></li>
+          <li><a href="#">Vaughan</a></li>
+          <li><a href="#">Markham</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="tel:19052616800">(905) 261-6800</a></li>
+          <li><a href="mailto:info@prestigepavingsolutions.ca" class="footer-email"><span class="footer-email-local">info</span><span class="footer-email-domain">@prestigepavingsolutions.ca</span></a></li>
+          <li style="color:var(--ink-faint);">Mon – Sat · seasonal hours</li>
+          <li style="color:var(--ink-faint);">Greater Toronto Area</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Prestige Paving Solutions · All rights reserved</span>
+      <span>Driveway sealing &amp; paving · GTA · Fully insured</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Sticky call bar -->
+<div class="call-bar" id="callBar" role="region" aria-label="Quick contact">
+  <span class="call-bar-text">Ready to seal your driveway?</span>
+  <span class="call-bar-num">(905) 261-6800</span>
+  <a href="index.html" class="btn-primary">BOOK NOW!</a>
+</div>
+
+<script>
+  const callBar = document.getElementById('callBar');
+  window.addEventListener('scroll', function() {
+    callBar.classList.toggle('visible', window.scrollY > 600);
+  }, { passive: true });
+</script>
+
+</body>
+</html>
