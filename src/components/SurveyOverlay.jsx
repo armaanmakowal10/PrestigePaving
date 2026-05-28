@@ -79,11 +79,11 @@ function SurveyPromoVideo() {
 }
 
 const S_SERVICES = [
-  { id: 'sealing', t: 'Driveway sealing', d: 'Protect & restore asphalt surfaces' },
-  { id: 'paving', t: 'Asphalt paving & resurfacing', d: 'New driveways, overlays, repairs' },
-  { id: 'cracks', t: 'Crack filling & patch repair', d: 'Stop water damage before it spreads' },
-  { id: 'commercial', t: 'Commercial property', d: 'Parking lots & private roads' },
-  { id: 'striping', t: 'Line striping', d: 'Parking lot lines & markings' },
+  { id: 'seal-coating', t: 'Seal Coating', d: 'Protect & restore asphalt surfaces' },
+  { id: 'line-stripping', t: 'Line Stripping', d: 'Parking lot lines & markings' },
+  { id: 'crack-repair', t: 'Crack Repair', d: 'Stop water damage before it spreads' },
+  { id: 'hole-repair', t: 'Hole Repair', d: 'Potholes & surface damage' },
+  { id: 'asphalt-paving', t: 'Asphalt Paving', d: 'New driveways, overlays, resurfacing' },
   { id: 'other', t: 'Other', d: 'Tell us what you need' },
 ];
 
@@ -384,7 +384,7 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
             <path d="M8 20.5L16 28L32 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <h2 className="q-title" style={{ fontSize: 'clamp(48px, 7vw, 96px)' }}>Request <em>Received!</em></h2>
+        <h2 className="q-title">Request <em>Received!</em></h2>
         <p className="q-sub" style={{ textAlign: 'center', margin: '0 auto' }}>
           Thanks{data.email ? `, ${data.email.split('@')[0]}` : ''} — we&apos;ll reach out shortly with your free quote.
         </p>

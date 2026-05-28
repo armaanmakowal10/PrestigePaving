@@ -8,8 +8,8 @@ export function BrandLogo({ className = 'brand-logo' }) {
       src={mediaUrl(LOGO_SRC)}
       alt={BRAND_NAME}
       className={className}
-      width={300}
-      height={88}
+      width={978}
+      height={204}
       decoding="async"
     />
   );

@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { NavDrawer } from '../components/NavDrawer';
+import { SiteNav } from '../components/SiteNav';
 import { PHONE_DISPLAY, PHONE_TEL, EMAIL } from '../lib/mediaUrl';
 import { BrandLogo } from '../lib/brand';
 import '../about-scoped.css';
 
 export default function About() {
-  const [aboutOpen, setAboutOpen] = useState(false);
-
   useEffect(() => {
     document.body.classList.add('page-about');
     return () => document.body.classList.remove('page-about');
@@ -24,30 +22,7 @@ export default function About() {
 
   return (
     <>
-      <nav className="nav">
-        <div className="container nav-inner">
-          <Link className="brand" to="/" title="Go to home">
-            <BrandLogo />
-          </Link>
-          <div className="nav-right">
-            <div className="nav-menu-slot">
-              <button
-                type="button"
-                className="nav-hamburger"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setAboutOpen(true);
-                }}
-                aria-label="Open menu"
-              >
-                <span /><span /><span />
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <NavDrawer open={aboutOpen} onClose={() => setAboutOpen(false)} />
+      <SiteNav />
 
       <section className="about-hero">
         <div className="about-hero-img about-hero-img--gradient" aria-hidden="true" />
@@ -153,7 +128,7 @@ export default function About() {
       </footer>
 
       <div className="call-bar" id="callBar" role="region" aria-label="Quick contact">
-        <span className="call-bar-text">Ready to seal your driveway?</span>
+        <span className="call-bar-text">Ready to Elevate Your Driveway?</span>
         <span className="call-bar-num">{PHONE_DISPLAY}</span>
         <Link to="/" className="btn-primary">BOOK NOW!</Link>
       </div>

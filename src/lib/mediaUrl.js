@@ -2,7 +2,7 @@
 export const HERO_VIDEO_SRC = '/media/IMG_1765.MOV';
 
 /** Site logo in /public/media */
-export const LOGO_SRC = '/media/prestige-paving-logo.png';
+export const LOGO_SRC = '/media/prestige-paving-logo-transparent.png';
 
 /** Survey location step backgrounds in /public/media (slideshow) */
 export const SURVEY_LOCATION_BG_SRCS = [

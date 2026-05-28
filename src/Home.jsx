@@ -10,8 +10,8 @@ import {
   TweakSelect,
 } from './components/tweaks-panel';
 import { SurveyOverlay } from './components/SurveyOverlay';
-import { NavDrawer } from './components/NavDrawer';
-import { PHONE_DISPLAY, PHONE_TEL, EMAIL, HERO_VIDEO_SRC, OUR_PROCESS_VIDEO_SRC, BEFORE_AFTER_PAIRS, mediaUrl } from './lib/mediaUrl';
+import { SiteNav } from './components/SiteNav';
+import { PHONE_DISPLAY, PHONE_TEL, EMAIL, OUR_PROCESS_VIDEO_SRC, BEFORE_AFTER_PAIRS, mediaUrl } from './lib/mediaUrl';
 import { BrandLogo } from './lib/brand';
 
 const GOOGLE_REVIEWS_URL = '#';
@@ -110,6 +110,50 @@ const Icon = {
   phone: (p) => (
     <svg viewBox="0 0 16 16" fill="none" width="16" height="16" {...p}>
       <path d="M3 3.5c0-.8.7-1.5 1.5-1.5h2l1.2 3-1.6 1c1 2 2.4 3.4 4.4 4.4l1-1.6 3 1.2v2c0 .8-.7 1.5-1.5 1.5C7 14 2 9 2 4.5 2 4.2 2 3.8 3 3.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+    </svg>
+  ),
+  sealCoating: (p) => (
+    <svg viewBox="0 0 44 44" fill="none" {...p}>
+      <rect x="7" y="28" width="30" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
+      <path d="M15 28V17c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v11" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
+      <path d="M22 9v6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+      <path d="M18 9h8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+      <path d="M9 37h26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.45"/>
+    </svg>
+  ),
+  lineStripping: (p) => (
+    <svg viewBox="0 0 44 44" fill="none" {...p}>
+      <rect x="6" y="8" width="32" height="28" rx="2" stroke="currentColor" strokeWidth="1.4"/>
+      <path d="M14 12v20M22 12v20M30 12v20" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeDasharray="3.5 5"/>
+    </svg>
+  ),
+  crackRepair: (p) => (
+    <svg viewBox="0 0 44 44" fill="none" {...p}>
+      <rect x="6" y="10" width="32" height="24" rx="2" stroke="currentColor" strokeWidth="1.4"/>
+      <path d="M11 30l5-7 4 3 5-9 4 5 4-8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M28 14l4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+      <circle cx="30" cy="16" r="2.5" stroke="currentColor" strokeWidth="1.2"/>
+    </svg>
+  ),
+  holeRepair: (p) => (
+    <svg viewBox="0 0 44 44" fill="none" {...p}>
+      <rect x="6" y="12" width="32" height="22" rx="2" stroke="currentColor" strokeWidth="1.4"/>
+      <ellipse cx="22" cy="27" rx="9" ry="5.5" stroke="currentColor" strokeWidth="1.4"/>
+      <path d="M14 27c2.5-2 5.5-2 8 0s5.5 2 8 0" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+      <path d="M12 18h20" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+    </svg>
+  ),
+  asphaltPaving: (p) => (
+    <svg viewBox="0 0 44 44" fill="none" {...p}>
+      <path d="M6 32h32" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+      <path d="M8 32V20l14-9 14 9v12" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
+      <path d="M8 26h28M8 20h28" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.55"/>
+    </svg>
+  ),
+  otherService: (p) => (
+    <svg viewBox="0 0 44 44" fill="none" {...p}>
+      <rect x="8" y="8" width="28" height="28" rx="4" stroke="currentColor" strokeWidth="1.4"/>
+      <path d="M16 22h12M22 16v12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
     </svg>
   ),
 };
@@ -227,52 +271,29 @@ function BrandMark() {
   );
 }
 
-// ─── Hero background video ───
-function HeroBackgroundVideo() {
+function ProcessVideo() {
   const videoRef = React.useRef(null);
 
   React.useEffect(() => {
     const video = videoRef.current;
     if (!video) return undefined;
-
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => {
-      if (mq.matches) {
-        video.pause();
-      } else {
-        video.play().catch(() => {});
-      }
+    video.muted = true;
+    const play = () => {
+      video.play().catch(() => {});
     };
-
-    sync();
-    mq.addEventListener('change', sync);
-    return () => mq.removeEventListener('change', sync);
+    play();
+    return undefined;
   }, []);
 
   return (
     <video
       ref={videoRef}
-      className="hero-bg-video"
+      className="our-process-video"
       autoPlay
       muted
       loop
       playsInline
       preload="auto"
-      aria-hidden="true"
-    >
-      <source src={mediaUrl(HERO_VIDEO_SRC)} type="video/quicktime" />
-      <source src={mediaUrl(HERO_VIDEO_SRC)} type="video/mp4" />
-    </video>
-  );
-}
-
-function ProcessVideo() {
-  return (
-    <video
-      className="our-process-video"
-      controls
-      playsInline
-      preload="metadata"
       aria-label="Our driveway sealing and paving process"
     >
       <source src={mediaUrl(OUR_PROCESS_VIDEO_SRC)} type="video/mp4" />
@@ -280,17 +301,35 @@ function ProcessVideo() {
   );
 }
 
-const HERO_TRUST_BADGES = [
-  '10+ Years Experience',
-  'Fully Licensed & Insured',
-  'Free On-Site Quotes',
+const TRUST_STRIP_ITEMS = [
+  { icon: 'cert', text: 'Free on-site quotes' },
+  { icon: 'shield', text: 'Fully insured · GTA' },
+  { icon: 'star', text: '4.9 / 5 customer rating' },
+  { icon: 'clock', text: 'Fast scheduling · Mon–Sat' },
+  { icon: 'cert', text: 'Driveway sealing specialists' },
+  { icon: 'shield', text: 'Premium sealers & asphalt' },
 ];
 
-function HeroCertCheck() {
+function TrustCarousel() {
+  const track = [...TRUST_STRIP_ITEMS, ...TRUST_STRIP_ITEMS];
+
   return (
-    <svg className="hero-cert-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M3 8.5l3 3L13 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <div className="trust-carousel" aria-label="Trust badges">
+      <div className="trust-carousel-track">
+        {track.map((item, i) => {
+          const Ico = Icon[item.icon];
+          return (
+            <div
+              key={`${item.text}-${i}`}
+              className="trust-item"
+              aria-hidden={i >= TRUST_STRIP_ITEMS.length ? true : undefined}
+            >
+              <Ico /> {item.text}
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
@@ -390,49 +429,69 @@ function RealResultsCarousel({ pairs }) {
   );
 }
 
+// ─── Hero background slideshow ───
+const HERO_BG_SLIDES = [
+  { src: mediaUrl('/media/pavement-marking-guide.jpg') },
+  { src: mediaUrl('/media/nacsupplyinc-seotool-52134-howasealcoat-blogbanner3_2048x.jpg') },
+  { src: mediaUrl('/media/blog-4-commercial-paving-repair.jpg') },
+  { src: mediaUrl('/media/asphalt-paving-guide.jpg') },
+  { src: mediaUrl('/media/20190330_115127-e1554151664764.jpg') },
+];
+
+function HeroSlideshow({ activeIdx }) {
+  return (
+    <div className="hero-slides" aria-hidden="true">
+      {HERO_BG_SLIDES.map((s, i) => (
+        <div
+          key={s.src}
+          className={`hero-slide${s.bgPosition ? ' hero-slide--focus-top' : ''}${i === activeIdx ? ' active' : ''}`}
+          style={{
+            backgroundImage: `url(${s.src})`,
+            ...(s.bgPosition ? { backgroundPosition: s.bgPosition } : {}),
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 // ─── Hero variants ───
 function HeroCentered({ headline, openBooking }) {
   const SERVICES = [
-    { id: 'sealing', t: 'Driveway Sealing' },
-    { id: 'paving', t: 'Asphalt Paving' },
-    { id: 'cracks', t: 'Crack Filling' },
-    { id: 'commercial', t: 'Commercial Property' },
-    { id: 'striping', t: 'Line Striping' },
-    { id: 'other', t: 'Other' },
+    { id: 'seal-coating', t: 'Seal Coating', icon: 'sealCoating' },
+    { id: 'line-stripping', t: 'Line Stripping', icon: 'lineStripping' },
+    { id: 'crack-repair', t: 'Crack Repair', icon: 'crackRepair' },
+    { id: 'hole-repair', t: 'Hole Repair', icon: 'holeRepair' },
+    { id: 'asphalt-paving', t: 'Asphalt Paving', icon: 'asphaltPaving' },
+    { id: 'other', t: 'Other', icon: 'otherService' },
   ];
   return (
-    <div className="hero-content">
-      <div className="hero-title-wrap">
-        <div className="hero-title-panel">
-          <h1 className="hero-question">Select Your <em>Service</em></h1>
-        </div>
+    <div className="hero-content hero-split-content">
+      <div className="hero-split-head">
+        <h1 className="hero-split-title">
+          <span className="hero-split-title-line">Select Your</span>
+          <span className="hero-split-title-line hero-split-title-line--accent">Service</span>
+        </h1>
       </div>
-      <span className="hero-tag-light hero-tag-pulse">
-        Receive 10% off when you complete your free quote request!
-      </span>
       <div className="hero-svc-grid">
-        {SERVICES.map((s) => (
-          <button key={s.id} className="hero-loc hero-svc"
-                  onClick={() => openBooking({ service: s.id })}>
-            <span className="hero-loc-t">{s.t}</span>
-          </button>
-        ))}
+        {SERVICES.map((s) => {
+          const SvcIcon = Icon[s.icon];
+          return (
+            <button key={s.id} className="hero-loc hero-svc"
+                    onClick={() => openBooking({ service: s.id })}>
+              <span className="hero-svc-inner">
+                <span className="hero-svc-icon" aria-hidden="true">
+                  {SvcIcon ? <SvcIcon /> : null}
+                </span>
+                <span className="hero-loc-t">{s.t}</span>
+              </span>
+            </button>
+          );
+        })}
       </div>
-      <a className="hero-phone" href={`tel:${PHONE_TEL}`} aria-label={`Call us now at ${PHONE_DISPLAY}`}>
-        <span className="hero-phone-label">Call us now!</span>
-        <span className="hero-phone-num">
-          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 3h3l1.5 4-2 1.2a9 9 0 004.3 4.3L11 10.5 15 12v3a1 1 0 01-1 1A12 12 0 012 4a1 1 0 011-1z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/></svg>
-          {PHONE_DISPLAY}
-        </span>
-      </a>
-      <div className="hero-certs hero-phone-certs" aria-label="Why choose us">
-        {HERO_TRUST_BADGES.map((label) => (
-          <span key={label} className="hero-cert">
-            <HeroCertCheck />
-            {label}
-          </span>
-        ))}
-      </div>
+      <p className="hero-split-lead">
+        Receive <strong>10% off</strong> when you complete your free quote request!
+      </p>
     </div>
   );
 }
@@ -737,9 +796,9 @@ function Home() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   useReveal();
   const [bookingOpen, setBookingOpen] = React.useState(false);
-  const [aboutOpen, setAboutOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
   const [showCallBar, setShowCallBar] = React.useState(false);
+  const [slideIdx, setSlideIdx] = React.useState(0);
 
   React.useEffect(() => {
     const b = document.body;
@@ -763,6 +822,21 @@ function Home() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  React.useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const id = setInterval(() => {
+      setSlideIdx((i) => (i + 1) % HERO_BG_SLIDES.length);
+    }, 6000);
+    return () => clearInterval(id);
+  }, []);
+
+  React.useEffect(() => {
+    HERO_BG_SLIDES.forEach((s) => {
+      const img = new Image();
+      img.src = s.src;
+    });
+  }, []);
+
   const headline = HEADLINES[t.headline] || HEADLINES.precision;
 
   let HeroBody = HeroCentered;
@@ -773,70 +847,19 @@ function Home() {
 
   return (
     <React.Fragment>
-      {/* Nav */}
-      <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
-        <div className="container nav-inner">
-          <a className="brand" href="#services"
-             onClick={(e) => {
-               e.preventDefault();
-               const el = document.getElementById('services');
-               if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-             }}
-             title="Go to services">
-            <BrandLogo />
-          </a>
-          <div className="nav-right">
-            <div className="nav-menu-slot">
-              <button
-                type="button"
-                className="nav-hamburger"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setAboutOpen(true);
-                }}
-                aria-label="Open menu"
-              >
-                <span /><span /><span />
-              </button>
-            </div>
+      <div className="hero-shell">
+        <HeroSlideshow activeIdx={slideIdx} />
+        <div className="hero-veil" aria-hidden="true" />
+        <SiteNav scrolled={scrolled} />
+        <section className={`hero ${heroLayoutClass}`}>
+          <div className="container">
+            <HeroBody headline={headline} openBooking={openBooking} />
           </div>
-        </div>
-      </nav>
-
-      <NavDrawer
-        open={aboutOpen}
-        onClose={() => setAboutOpen(false)}
-        onHome={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      />
-
-      {/* Hero */}
-      <section className={`hero ${heroLayoutClass}`}>
-        <div className="hero-bg" aria-hidden="true">
-          <HeroBackgroundVideo />
-        </div>
-        <div className="hero-veil"></div>
-        <div className="container">
-          <HeroBody headline={headline} openBooking={openBooking} />
-        </div>
-      </section>
-
-      {/* Trust strip */}
-      <section className="trust">
-        <div className="trust-marquee" aria-label="Trust badges">
-          <div className="trust-track">
-            {[0,1].map((dup) => (
-              <div className="trust-track-group" key={dup} aria-hidden={dup === 1 ? 'true' : 'false'}>
-                <div className="trust-item"><Icon.cert /> Free on-site quotes</div>
-                <div className="trust-item"><Icon.shield /> Fully insured · GTA</div>
-                <div className="trust-item"><Icon.star /> 4.9 / 5 customer rating</div>
-                <div className="trust-item"><Icon.clock /> Fast scheduling · Mon–Sat</div>
-                <div className="trust-item"><Icon.cert /> Driveway sealing specialists</div>
-                <div className="trust-item"><Icon.shield /> Premium sealers &amp; asphalt</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+        <section className="trust">
+          <TrustCarousel />
+        </section>
+      </div>
 
       {/* Stats */}
       <section className="stats" id="services">
@@ -1045,7 +1068,7 @@ function Home() {
 
       {/* Sticky call bar */}
       <div className={`call-bar${showCallBar ? ' visible' : ''}`} role="region" aria-label="Quick contact">
-        <span className="call-bar-text">Ready to seal your driveway?</span>
+        <span className="call-bar-text">Ready to Elevate Your Driveway?</span>
         <span className="call-bar-num">{PHONE_DISPLAY}</span>
         <button className="btn btn-primary btn-sm call-bar-cta" onClick={openBooking}>
           BOOK NOW!
