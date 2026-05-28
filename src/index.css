@@ -221,12 +221,22 @@
     transform: none;
   }
   .footer .brand {
-    display: inline-block;
+    display: block;
+    max-width: 100%;
     line-height: 0;
+    margin-bottom: 18px;
   }
   .footer .brand-logo {
-    height: 88px;
-    max-width: 400px;
+    height: auto;
+    max-height: 52px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: left center;
+  }
+  .footer-brand-col {
+    min-width: 0;
+    overflow: hidden;
   }
   @media (max-width: 720px) {
     .nav .brand-logo,
@@ -1752,9 +1762,38 @@
     line-height: 1.6;
     color: var(--ink-dim);
   }
+  .our-process-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+  }
+  .our-process-copy {
+    min-width: 0;
+  }
+  .our-process-intro {
+    margin: 0 0 clamp(24px, 3vw, 32px);
+    font-size: clamp(15px, 2vw, 17px);
+    line-height: 1.65;
+    color: var(--ink-dim);
+  }
+  .our-process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .our-process-steps .process-step {
+    padding-bottom: clamp(20px, 2.5vw, 28px);
+    margin-bottom: clamp(20px, 2.5vw, 28px);
+  }
+  .our-process-steps .process-step:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+  }
   .our-process-video-wrap {
-    max-width: 960px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
     border-radius: 16px;
     overflow: hidden;
     border: 1px solid color-mix(in oklab, var(--accent) 28%, var(--line-strong));
@@ -1772,6 +1811,10 @@
     .our-process { padding: 72px 0; }
     .our-process-head { margin-bottom: 32px; }
     .our-process-sub { padding: 0 8px; }
+    .our-process-split {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
   }
 
   .real-results {
@@ -2162,7 +2205,7 @@
     overflow-wrap: anywhere;
     word-break: break-word;
   }
-  .footer-tag { font-family: var(--display); font-size: 19px; line-height: 1.4; max-width: 320px; color: var(--ink-dim); }
+  .footer-tag { font-family: var(--display); font-size: 19px; line-height: 1.4; max-width: 320px; color: var(--ink-dim); margin: 18px 0 0; }
   .footer-tag em { color: var(--accent); font-style: italic; }
 
   .call-bar {

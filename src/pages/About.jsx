@@ -77,8 +77,8 @@ export default function About() {
       <footer className="footer">
         <div className="container">
           <div className="footer-row">
-            <div>
-              <Link to="/" style={{ display: 'inline-block', marginBottom: '18px' }}>
+            <div className="footer-brand-col">
+              <Link to="/" className="brand">
                 <BrandLogo />
               </Link>
               <p className="footer-tag">

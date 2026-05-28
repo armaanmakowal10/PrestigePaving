@@ -301,6 +301,29 @@ function ProcessVideo() {
   );
 }
 
+const PROCESS_STEPS = [
+  {
+    n: '01',
+    title: 'Free on-site quote',
+    desc: 'We visit your driveway, assess the condition, and recommend the right service — sealing, paving, or repair.',
+  },
+  {
+    n: '02',
+    title: 'Surface prep',
+    desc: 'Clean the asphalt, fill cracks, and patch damaged areas so the finish bonds properly and lasts.',
+  },
+  {
+    n: '03',
+    title: 'Seal or pave',
+    desc: 'Apply premium sealer or fresh asphalt with professional equipment built for GTA weather.',
+  },
+  {
+    n: '04',
+    title: 'Final finish',
+    desc: 'Clean edges, line striping if needed, and a walkthrough so you know exactly what was done.',
+  },
+];
+
 const TRUST_STRIP_ITEMS = [
   { icon: 'cert', text: 'Free on-site quotes' },
   { icon: 'shield', text: 'Fully insured · GTA' },
@@ -904,12 +927,27 @@ function Home() {
           <div className="our-process-head" data-reveal>
             <span className="uplabel">— How We Work</span>
             <h2 className="our-process-title">Our <em>Process</em></h2>
-            <p className="our-process-sub">
-              From free on-site quote to finished driveway — see how we prepare, seal, and finish every GTA job.
-            </p>
           </div>
-          <div className="our-process-video-wrap" data-reveal>
-            <ProcessVideo />
+          <div className="our-process-split" data-reveal>
+            <div className="our-process-video-wrap">
+              <ProcessVideo />
+            </div>
+            <div className="our-process-copy">
+              <p className="our-process-intro">
+                From free on-site quote to finished driveway — see how we prepare, seal, and finish every GTA job.
+              </p>
+              <div className="our-process-steps">
+                {PROCESS_STEPS.map((step) => (
+                  <div key={step.n} className="process-step">
+                    <span className="process-num">{step.n}</span>
+                    <div className="process-body">
+                      <h4>{step.title}</h4>
+                      <p>{step.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1016,11 +1054,11 @@ function Home() {
       <footer className="footer">
         <div className="container">
           <div className="footer-row">
-            <div>
-              <a className="brand" href="#" style={{ marginBottom: 18 }}>
+            <div className="footer-brand-col">
+              <a className="brand" href="#">
                 <BrandLogo />
               </a>
-              <p className="footer-tag" style={{ marginTop: 18 }}>
+              <p className="footer-tag">
                 Driveway sealing and paving in the GTA — <em>curb appeal that lasts.</em>
               </p>
             </div>
