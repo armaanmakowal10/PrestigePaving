@@ -11,7 +11,7 @@ import {
 } from './components/tweaks-panel';
 import { SurveyOverlay } from './components/SurveyOverlay';
 import { SiteNav } from './components/SiteNav';
-import { PHONE_DISPLAY, PHONE_TEL, EMAIL, OUR_PROCESS_VIDEO_SRC, BEFORE_AFTER_PAIRS, mediaUrl } from './lib/mediaUrl';
+import { PHONE_DISPLAY, PHONE_TEL, EMAIL, HERO_VIDEO_SRC, OUR_PROCESS_VIDEO_SRC, BEFORE_AFTER_PAIRS, mediaUrl } from './lib/mediaUrl';
 import { BrandLogo } from './lib/brand';
 
 const GOOGLE_REVIEWS_URL = '#';
@@ -271,58 +271,194 @@ function BrandMark() {
   );
 }
 
-function ProcessVideo() {
+/** Share of video duration per step (must sum to 1). Steps 1–2 shorter; extra time on caution tape. */
+const PROCESS_STEP_WEIGHTS = [0.13, 0.17, 0.17, 0.23, 0.30];
+
+const PROCESS_FEATURES = [
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 7h11v9H3z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+        <path d="M14 10h4l3 3.5V16h-7" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+        <circle cx="7" cy="17.5" r="1.7" stroke="currentColor" strokeWidth="1.5"/>
+        <circle cx="17" cy="17.5" r="1.7" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    ),
+    title: 'Own equipment fleet',
+    desc: "We don't rely on rentals. Our fleet is ready to deploy.",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="9" cy="8" r="3" stroke="currentColor" strokeWidth="1.5"/>
+        <circle cx="16.5" cy="9.5" r="2.3" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M3.5 18c.6-3 3-4.6 5.5-4.6S14 15 14.6 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M14.5 18c.4-2 2-3.3 4-3.3s3.6 1.3 4 3.3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+    title: 'In-house crew',
+    desc: 'Direct accountability and quality control from our own team.',
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M12 7v5l3.5 2.2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+    title: 'Same-day assessment',
+    desc: 'Available upon request for urgent maintenance needs.',
+  },
+];
+
+const PROCESS_STEPS = [
+  {
+    n: '01',
+    title: 'Weed whack',
+    desc: 'We weed-whack any weeds along the edges and surface of the driveway so nothing interferes with the sealer.',
+  },
+  {
+    n: '02',
+    title: 'Blow off dirt',
+    desc: 'We blow off all dust, dirt, rocks, and debris — leaving a clean surface that is ready for sealing.',
+  },
+  {
+    n: '03',
+    title: 'Tape the edges',
+    desc: 'We tape off the edges of your driveway and surrounding areas to protect sidewalks, garage floors, and landscaping from overspray.',
+  },
+  {
+    n: '04',
+    title: 'Double-coat seal',
+    desc: 'We apply two full coats of premium sealer across your driveway for even coverage, deep protection, and a rich, lasting finish.',
+  },
+  {
+    n: '05',
+    title: 'Caution tape',
+    desc: 'We put up caution tape around the driveway so nobody walks or drives on it while the sealer cures properly.',
+  },
+];
+
+function StatsSectionVideo() {
   const videoRef = React.useRef(null);
 
   React.useEffect(() => {
     const video = videoRef.current;
     if (!video) return undefined;
     video.muted = true;
-    const play = () => {
-      video.play().catch(() => {});
-    };
-    play();
+    video.play().catch(() => {});
     return undefined;
   }, []);
 
   return (
-    <video
-      ref={videoRef}
-      className="our-process-video"
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="auto"
-      aria-label="Our driveway sealing and paving process"
-    >
-      <source src={mediaUrl(OUR_PROCESS_VIDEO_SRC)} type="video/mp4" />
-    </video>
+    <div className="stats-video-wrap" data-reveal>
+      <video
+        ref={videoRef}
+        className="stats-video"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-label="Prestige Paving driveway sealing and paving work in the GTA"
+      >
+        <source src={mediaUrl(HERO_VIDEO_SRC)} type="video/quicktime" />
+        <source src={mediaUrl(HERO_VIDEO_SRC)} type="video/mp4" />
+      </video>
+    </div>
   );
 }
 
-const PROCESS_STEPS = [
-  {
-    n: '01',
-    title: 'Free on-site quote',
-    desc: 'We visit your driveway, assess the condition, and recommend the right service — sealing, paving, or repair.',
-  },
-  {
-    n: '02',
-    title: 'Surface prep',
-    desc: 'Clean the asphalt, fill cracks, and patch damaged areas so the finish bonds properly and lasts.',
-  },
-  {
-    n: '03',
-    title: 'Seal or pave',
-    desc: 'Apply premium sealer or fresh asphalt with professional equipment built for GTA weather.',
-  },
-  {
-    n: '04',
-    title: 'Final finish',
-    desc: 'Clean edges, line striping if needed, and a walkthrough so you know exactly what was done.',
-  },
-];
+function OurProcessBlock() {
+  const [activeStepIdx, setActiveStepIdx] = React.useState(0);
+  const videoRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+
+    video.muted = true;
+    video.play().catch(() => {});
+
+    const syncStepToVideo = () => {
+      const { duration, currentTime } = video;
+      if (!duration || Number.isNaN(duration)) return;
+
+      let elapsed = 0;
+      for (let i = 0; i < PROCESS_STEPS.length; i++) {
+        const stepEnd = elapsed + duration * PROCESS_STEP_WEIGHTS[i];
+        if (currentTime < stepEnd) {
+          setActiveStepIdx(i);
+          return;
+        }
+        elapsed = stepEnd;
+      }
+      setActiveStepIdx(PROCESS_STEPS.length - 1);
+    };
+
+    video.addEventListener('timeupdate', syncStepToVideo);
+    video.addEventListener('seeked', syncStepToVideo);
+    video.addEventListener('loadedmetadata', syncStepToVideo);
+
+    return () => {
+      video.removeEventListener('timeupdate', syncStepToVideo);
+      video.removeEventListener('seeked', syncStepToVideo);
+      video.removeEventListener('loadedmetadata', syncStepToVideo);
+    };
+  }, []);
+
+  return (
+    <div className="our-process-split" data-reveal>
+      <div className="our-process-video-col">
+        <div className="our-process-video-wrap">
+          <video
+            ref={videoRef}
+            className="our-process-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-label="Our driveway sealing and paving process"
+          >
+            <source src={mediaUrl(OUR_PROCESS_VIDEO_SRC)} type="video/mp4" />
+          </video>
+        </div>
+        <div className="process-features">
+          {PROCESS_FEATURES.map((f) => (
+            <div key={f.title} className="process-feature">
+              <span className="process-feature-icon" aria-hidden="true">{f.icon}</span>
+              <div className="process-feature-body">
+                <h4>{f.title}</h4>
+                <p>{f.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="our-process-copy">
+        <p className="our-process-intro">
+          Every seal job follows the same careful process — from a spotless surface to a protected, finished driveway.
+        </p>
+        <div className="our-process-steps" aria-live="polite">
+          {PROCESS_STEPS.map((step, i) => (
+            <div
+              key={step.n}
+              className={`process-step${i === activeStepIdx ? ' is-active' : ''}`}
+              aria-current={i === activeStepIdx ? 'step' : undefined}
+            >
+              <span className="process-num">{step.n}</span>
+              <div className="process-body">
+                <h4>{step.title}</h4>
+                <p>{step.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const TRUST_STRIP_ITEMS = [
   { icon: 'cert', text: 'Free on-site quotes' },
@@ -515,6 +651,21 @@ function HeroCentered({ headline, openBooking }) {
       <p className="hero-split-lead">
         Receive <strong>10% off</strong> when you complete your free quote request!
       </p>
+      <ul className="hero-trust-list" aria-label="Why choose Prestige Paving">
+        {[
+          'Fully insured · GTA-wide service',
+          'Free on-site quote — no obligation',
+          '500+ driveways sealed · 4.9 ★ rated',
+        ].map((item) => (
+          <li key={item} className="hero-trust-item">
+            <svg className="hero-trust-check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M6 10.5l2.6 2.5L14 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -887,73 +1038,54 @@ function Home() {
       {/* Stats */}
       <section className="stats" id="services">
         <div className="container">
-          <div className="stats-layout">
-            <div className="stats-content">
-              <div className="section-head" style={{ marginBottom: 48 }}>
-                <div>
-                  <h2>GTA <em>Driveway Sealing</em> &amp; Paving Experts</h2>
-                </div>
+          <div className="section-head stats-head" data-reveal>
+            <div>
+              <h2>GTA <em>Driveway Sealing</em> &amp; Paving Experts</h2>
+            </div>
+          </div>
+          <div className="stats-main" data-reveal>
+            <div className="stats-grid">
+              <div className="stat">
+                <span className="label">Driveways sealed</span>
+                <span className="num"><Counter end={500} />+</span>
+                <span className="desc">Residential and commercial projects across the Greater Toronto Area.</span>
               </div>
-              <div className="stats-grid">
-                <div className="stat">
-                  <span className="label">Driveways sealed</span>
-                  <span className="num"><Counter end={500} />+</span>
-                  <span className="desc">Residential and commercial projects across the Greater Toronto Area.</span>
-                </div>
-                <div className="stat">
-                  <span className="label">GTA communities</span>
-                  <span className="num"><Counter end={25} />+</span>
-                  <span className="desc">Toronto, Mississauga, Brampton, Vaughan, Markham, and beyond.</span>
-                </div>
-                <div className="stat">
-                  <span className="label">Quote turnaround</span>
-                  <span className="num"><Counter end={24} /><em>hr</em></span>
-                  <span className="desc">From request to on-site visit — often same week in season.</span>
-                </div>
-                <div className="stat">
-                  <span className="label">Customer rating</span>
-                  <span className="num"><Counter end={4.9} decimals={1} /><em>/5</em></span>
-                  <span className="desc">Trusted for sealing, paving, and honest recommendations.</span>
-                </div>
+              <div className="stat">
+                <span className="label">GTA communities</span>
+                <span className="num"><Counter end={25} />+</span>
+                <span className="desc">Toronto, Mississauga, Brampton, Vaughan, Markham, and beyond.</span>
+              </div>
+              <div className="stat">
+                <span className="label">Quote turnaround</span>
+                <span className="num"><Counter end={24} /><em>hr</em></span>
+                <span className="desc">From request to on-site visit — often same week in season.</span>
+              </div>
+              <div className="stat">
+                <span className="label">Customer rating</span>
+                <span className="num"><Counter end={4.9} decimals={1} /><em>/5</em></span>
+                <span className="desc">Trusted for sealing, paving, and honest recommendations.</span>
               </div>
             </div>
+            <StatsSectionVideo />
           </div>
         </div>
       </section>
 
       {/* Our process */}
       <section className="section our-process" id="process">
+        <Pollen color="#0080e0" minAlpha={0.12} maxAlpha={0.42} count={100} />
         <div className="container">
           <div className="our-process-head" data-reveal>
             <span className="uplabel">— How We Work</span>
             <h2 className="our-process-title">Our <em>Process</em></h2>
           </div>
-          <div className="our-process-split" data-reveal>
-            <div className="our-process-video-wrap">
-              <ProcessVideo />
-            </div>
-            <div className="our-process-copy">
-              <p className="our-process-intro">
-                From free on-site quote to finished driveway — see how we prepare, seal, and finish every GTA job.
-              </p>
-              <div className="our-process-steps">
-                {PROCESS_STEPS.map((step) => (
-                  <div key={step.n} className="process-step">
-                    <span className="process-num">{step.n}</span>
-                    <div className="process-body">
-                      <h4>{step.title}</h4>
-                      <p>{step.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <OurProcessBlock />
         </div>
       </section>
 
       {/* Real results — before & after */}
       <section className="section real-results" id="results">
+        <Pollen color="#0080e0" minAlpha={0.12} maxAlpha={0.42} count={100} />
         <div className="container">
           <div className="real-results-head" data-reveal>
             <span className="uplabel">— Before &amp; After</span>
@@ -1059,7 +1191,7 @@ function Home() {
                 <BrandLogo />
               </a>
               <p className="footer-tag">
-                Driveway sealing and paving in the GTA — <em>curb appeal that lasts.</em>
+                Don&apos;t delay, seal today — <em>the Prestige way!</em>
               </p>
             </div>
             <div>

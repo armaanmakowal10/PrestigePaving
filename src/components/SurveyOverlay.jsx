@@ -1,8 +1,8 @@
 // Survey overlay — full-page multi-step flow with animated page transitions.
 import React from 'react';
 import { BackgroundBeams } from '@/components/ui/background-beams';
-import { BrandLogo } from '@/lib/brand';
 import { SURVEY_LOCATION_BG_SRCS, SURVEY_PROPERTY_BG_SRCS, SURVEY_PROMO_VIDEO_SRC, mediaUrl } from '@/lib/mediaUrl';
+import { SiteNav } from '@/components/SiteNav';
 
 function useSurveyPhotoSlideshow(isActive, slideCount, intervalMs = 6500) {
   const [index, setIndex] = React.useState(0);
@@ -201,14 +201,38 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
     }
     if (step === STEPS.length - 1) {
       setSubmitting(true);
-      setTimeout(() => {
-        setSubmitting(false);
-        setDone(true);
-        setTimeout(() => {
-          if (onComplete) onComplete();
-          else onClose();
-        }, 3500);
-      }, 350);
+      const labelFor = (list, id) => {
+        const found = list.find((x) => x.id === id);
+        return found ? found.t : id;
+      };
+      const locationLabel = data.location === 'other'
+        ? `Other — ${data.locationOther.trim()}`
+        : labelFor(S_AREAS, data.location);
+      const payload = {
+        _subject: 'New Prestige Paving quote request',
+        _template: 'table',
+        _captcha: 'false',
+        Service: labelFor(S_SERVICES, data.service),
+        Location: locationLabel,
+        Property: labelFor(S_PROPS, data.property),
+        Email: data.email.trim(),
+        Phone: data.phone.trim(),
+        Notes: data.notes.trim() || '(none)',
+      };
+      fetch('https://formsubmit.co/ajax/prestigeps10@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .catch(() => {})
+        .finally(() => {
+          setSubmitting(false);
+          setDone(true);
+          setTimeout(() => {
+            if (onComplete) onComplete();
+            else onClose();
+          }, 3500);
+        });
       return;
     }
     setDirection('fwd');
@@ -404,13 +428,7 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
         <SurveyStepPhotoBg slides={SURVEY_PROPERTY_BG_SRCS} index={propertyBgIndex} />
       )}
 
-      <div className="survey-head">
-        <a className="brand" href="#services"
-           onClick={(e) => { e.preventDefault(); if (onComplete) onComplete(); else onClose(); }}
-           title="Go to home">
-          <BrandLogo />
-        </a>
-      </div>
+      <SiteNav onClose={() => { if (onComplete) onComplete(); else onClose(); }} />
 
       <div className="survey-progress-track">
         <div className="survey-progress-fill" style={{ width: `${progressPct}%` }}></div>
@@ -427,7 +445,7 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
         <div
              key={done ? 'done' : step}
              ref={pageRef}
-             className={`survey-page enter-${direction}${step === 3 ? ' no-scroll' : ''}`}>
+             className={`survey-page${step === 3 && !done ? ' no-anim no-scroll' : ` enter-${direction}`}`}>
           {done ? renderDone() : renderStep()}
         </div>
       </div>

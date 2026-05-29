@@ -9,15 +9,20 @@ const PhoneIcon = () => (
   </svg>
 );
 
-export function SiteNav({ scrolled = false }) {
+export function SiteNav({ scrolled = false, onClose }) {
   const location = useLocation();
   const isHome = location.pathname === '/';
   const isAbout = location.pathname === '/about';
 
   const handleHomeClick = (e) => {
+    if (onClose) onClose();
     if (!isHome) return;
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleAboutClick = () => {
+    if (onClose) onClose();
   };
 
   return (
@@ -31,7 +36,7 @@ export function SiteNav({ scrolled = false }) {
           <Link className={`nav-link${isHome ? ' active' : ''}`} to="/" onClick={handleHomeClick}>
             Home
           </Link>
-          <Link className={`nav-link${isAbout ? ' active' : ''}`} to="/about">
+          <Link className={`nav-link${isAbout ? ' active' : ''}`} to="/about" onClick={handleAboutClick}>
             About Us
           </Link>
         </div>
