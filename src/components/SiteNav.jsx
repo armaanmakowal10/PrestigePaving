@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BrandLogo } from '../lib/brand';
 import { PHONE_DISPLAY, PHONE_TEL } from '../lib/mediaUrl';
+import { NavDrawer } from './NavDrawer';
 
 const PhoneIcon = () => (
   <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -13,6 +14,7 @@ export function SiteNav({ scrolled = false, onClose }) {
   const location = useLocation();
   const isHome = location.pathname === '/';
   const isAbout = location.pathname === '/about';
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleHomeClick = (e) => {
     if (onClose) onClose();
@@ -26,32 +28,52 @@ export function SiteNav({ scrolled = false, onClose }) {
   };
 
   return (
-    <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
-      <div className="container nav-inner">
-        <Link className="brand" to="/" onClick={handleHomeClick} title="Go to home">
-          <BrandLogo />
-        </Link>
-
-        <div className="nav-links" aria-label="Main navigation">
-          <Link className={`nav-link${isHome ? ' active' : ''}`} to="/" onClick={handleHomeClick}>
-            Home
+    <>
+      <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
+        <div className="container nav-inner">
+          <Link className="brand" to="/" onClick={handleHomeClick} title="Go to home">
+            <BrandLogo />
           </Link>
-          <Link className={`nav-link${isAbout ? ' active' : ''}`} to="/about" onClick={handleAboutClick}>
-            About Us
-          </Link>
-        </div>
 
-        <div className="nav-right">
-          <a
-            className="nav-phone nav-phone--bar nav-phone--cta"
-            href={`tel:${PHONE_TEL}`}
-            aria-label={`Call us now at ${PHONE_DISPLAY}`}
+          <div className="nav-links" aria-label="Main navigation">
+            <Link className={`nav-link${isHome ? ' active' : ''}`} to="/" onClick={handleHomeClick}>
+              Home
+            </Link>
+            <Link className={`nav-link${isAbout ? ' active' : ''}`} to="/about" onClick={handleAboutClick}>
+              About Us
+            </Link>
+          </div>
+
+          <div className="nav-right">
+            <a
+              className="nav-phone nav-phone--bar nav-phone--cta"
+              href={`tel:${PHONE_TEL}`}
+              aria-label={`Call us now at ${PHONE_DISPLAY}`}
+            >
+              <PhoneIcon />
+              <span className="nav-phone-num">{PHONE_DISPLAY}</span>
+            </a>
+          </div>
+
+          <button
+            type="button"
+            className="nav-hamburger"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={drawerOpen}
           >
-            <PhoneIcon />
-            <span className="nav-phone-num">{PHONE_DISPLAY}</span>
-          </a>
+            <span />
+            <span />
+            <span />
+          </button>
         </div>
-      </div>
-    </nav>
+      </nav>
+
+      <NavDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onHome={isHome ? () => window.scrollTo({ top: 0, behavior: 'smooth' }) : undefined}
+      />
+    </>
   );
 }

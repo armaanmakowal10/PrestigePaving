@@ -941,6 +941,169 @@ function FAQItem({ q, a, open, onToggle }) {
   );
 }
 
+const TESTIMONIALS = [
+  {
+    quote: "Our driveway looked tired and grey — after sealing it looks brand new. They showed up on time, explained the process, and the price matched the quote exactly. Already recommended them to our neighbours.",
+    name: "Sarah M.",
+    role: "Residential · Mississauga",
+  },
+  {
+    quote: "We needed our plaza parking lot resurfaced before winter. Prestige Paving handled striping, patching, and sealing with minimal disruption to tenants. Professional crew and clear communication throughout.",
+    name: "James T.",
+    role: "Commercial Property Manager",
+  },
+  {
+    quote: "Honest advice — they told us sealing was enough instead of pushing a full repave. Work was done in one day and they left the property clean. Will use them again when it's time to reseal.",
+    name: "David K.",
+    role: "Residential · Vaughan",
+  },
+  {
+    quote: "Quote was detailed, pricing was fair, and the finished driveway looks sharper than the day it was poured. The crew even cleaned the curb and walkway before they left. Quality work.",
+    name: "Priya R.",
+    role: "Residential · Brampton",
+  },
+  {
+    quote: "Three contractors quoted our crack repair — Prestige was the only one who walked us through what was actually causing it. Fixed it right the first time, no upsell pressure.",
+    name: "Michael B.",
+    role: "Residential · Oakville",
+  },
+  {
+    quote: "Booked online on a Sunday night, got a call Monday morning, sealed by Thursday. The whole process was easy and the driveway looks fantastic. Could not have asked for more.",
+    name: "Emily W.",
+    role: "Residential · Etobicoke",
+  },
+  {
+    quote: "Our condo board hired Prestige for the visitor lot and the result speaks for itself. Crisp line painting, smooth surface, and they finished a half-day ahead of schedule.",
+    name: "Andre L.",
+    role: "Condo Board · Toronto",
+  },
+  {
+    quote: "Showed up exactly when they said they would and worked through a hot afternoon to get it done in one pass. The black-jet finish has held up beautifully through the winter.",
+    name: "Janet H.",
+    role: "Residential · Markham",
+  },
+];
+
+function TestimonialsCarousel() {
+  const trackRef = React.useRef(null);
+  const [activePage, setActivePage] = React.useState(0);
+  const [pageCount, setPageCount] = React.useState(1);
+
+  const getMetrics = () => {
+    const track = trackRef.current;
+    if (!track) return null;
+    const slide = track.querySelector('.testimonial-slide');
+    if (!slide) return null;
+    const styles = getComputedStyle(track);
+    const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+    const slideWidth = slide.getBoundingClientRect().width;
+    const step = slideWidth + gap;
+    const perView = Math.max(1, Math.round((track.clientWidth + gap) / step));
+    return { step, perView };
+  };
+
+  const updateState = React.useCallback(() => {
+    const track = trackRef.current;
+    const m = getMetrics();
+    if (!track || !m) return;
+    const total = TESTIMONIALS.length;
+    const pages = Math.max(1, total - m.perView + 1);
+    setPageCount(pages);
+    const idx = Math.round(track.scrollLeft / m.step);
+    setActivePage(Math.min(pages - 1, Math.max(0, idx)));
+  }, []);
+
+  React.useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return undefined;
+    updateState();
+    const onScroll = () => updateState();
+    const onResize = () => updateState();
+    track.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
+    return () => {
+      track.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [updateState]);
+
+  const scrollToPage = (page) => {
+    const track = trackRef.current;
+    const m = getMetrics();
+    if (!track || !m) return;
+    const target = Math.min(pageCount - 1, Math.max(0, page));
+    track.scrollTo({ left: target * m.step, behavior: 'smooth' });
+  };
+
+  const goPrev = () => scrollToPage(activePage - 1);
+  const goNext = () => scrollToPage(activePage + 1);
+
+  return (
+    <div className="testimonials-carousel" data-reveal>
+      <button
+        type="button"
+        className="testimonials-arrow testimonials-arrow--prev"
+        onClick={goPrev}
+        aria-label="Previous testimonials"
+        disabled={activePage === 0}
+      >
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M11 3L5 9l6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      <div className="testimonials-track" ref={trackRef}>
+        {TESTIMONIALS.map((tItem, i) => {
+          const initial = tItem.name.trim().charAt(0);
+          return (
+            <div className="testimonial-slide" key={i}>
+              <a
+                href={GOOGLE_REVIEWS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="testimonial"
+                aria-label={`${tItem.name} — read review on Google`}
+              >
+                <blockquote className="testimonial-quote-text"><span className="testimonial-mark">"</span>{tItem.quote}<span className="testimonial-mark">"</span></blockquote>
+                <span className="testimonial-meta">
+                  <span className="testimonial-avatar" aria-hidden="true">{initial}</span>
+                  <span className="testimonial-id">
+                    <span className="testimonial-name">{tItem.name}</span>
+                    <span className="testimonial-role">{tItem.role}</span>
+                  </span>
+                </span>
+              </a>
+            </div>
+          );
+        })}
+      </div>
+      <button
+        type="button"
+        className="testimonials-arrow testimonials-arrow--next"
+        onClick={goNext}
+        aria-label="Next testimonials"
+        disabled={activePage >= pageCount - 1}
+      >
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M7 3l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      <div className="testimonials-dots" role="tablist" aria-label="Testimonial pages">
+        {Array.from({ length: pageCount }).map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            role="tab"
+            aria-selected={i === activePage}
+            aria-label={`Go to testimonial page ${i + 1}`}
+            className={`testimonials-dot${i === activePage ? ' active' : ''}`}
+            onClick={() => scrollToPage(i)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function FAQ() {
   const [openIdx, setOpenIdx] = React.useState(0);
   return (
@@ -1113,48 +1276,7 @@ function Home() {
               <span className="testimonials-rating">4.9 / 5 · 200+ reviews</span>
             </div>
           </div>
-          <div className="testimonials-grid">
-            {[
-              {
-                quote: "Our driveway looked tired and grey — after sealing it looks brand new. They showed up on time, explained the process, and the price matched the quote exactly. Already recommended them to our neighbours.",
-                name: "Sarah M.",
-                role: "Residential · Mississauga",
-              },
-              {
-                quote: "We needed our plaza parking lot resurfaced before winter. Prestige Paving handled striping, patching, and sealing with minimal disruption to tenants. Professional crew and clear communication throughout.",
-                name: "James T.",
-                role: "Commercial Property Manager",
-              },
-              {
-                quote: "Honest advice — they told us sealing was enough instead of pushing a full repave. Work was done in one day and they left the property clean. Will use them again when it's time to reseal.",
-                name: "David K.",
-                role: "Residential · Vaughan",
-              },
-            ].map((t, i) => {
-              const initial = t.name.trim().charAt(0);
-              return (
-                <a
-                  key={i}
-                  href={GOOGLE_REVIEWS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="testimonial"
-                  data-reveal
-                  data-reveal-delay={i + 1}
-                  aria-label={`${t.name} — read review on Google`}
-                >
-                  <blockquote className="testimonial-quote-text"><span className="testimonial-mark">"</span>{t.quote}<span className="testimonial-mark">"</span></blockquote>
-                  <span className="testimonial-meta">
-                    <span className="testimonial-avatar" aria-hidden="true">{initial}</span>
-                    <span className="testimonial-id">
-                      <span className="testimonial-name">{t.name}</span>
-                      <span className="testimonial-role">{t.role}</span>
-                    </span>
-                  </span>
-                </a>
-              );
-            })}
-          </div>
+          <TestimonialsCarousel />
         </div>
       </section>
 
