@@ -3049,7 +3049,7 @@
   }
   .survey--promo .promo-card {
     flex: 1;
-    justify-content: space-between;
+    justify-content: flex-start;
   }
   .survey--promo .promo-split-right {
     padding: 0;
@@ -3067,8 +3067,8 @@
   }
   .survey--promo .promo-card {
     gap: 22px;
-    justify-content: space-between;
-    height: 100%;
+    justify-content: flex-start;
+    height: auto;
   }
   .survey--promo .promo-card .q-title {
     font-size: clamp(28px, 3.4vw, 44px) !important;
