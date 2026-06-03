@@ -255,7 +255,7 @@
       max-width: min(240px, 62vw);
     }
     .nav-inner {
-      padding: 18px 0 12px;
+      padding: 18px 0 4px;
       padding-top: max(18px, calc(env(safe-area-inset-top, 0px) + 10px));
     }
     .nav-links,
@@ -2765,7 +2765,10 @@
   }
   @media (max-width: 720px) {
     .survey-progress-track {
-      margin-top: 96px;
+      margin-top: 72px;
+    }
+    .survey.survey--promo .survey-progress-track {
+      margin-top: 72px;
     }
   }
   .survey-progress-track .survey-progress-fill {
@@ -3146,7 +3149,7 @@
     }
     .survey.survey--promo .survey-page.no-scroll {
       overflow: hidden;
-      padding: 4px 20px 6px;
+      padding: 32px 20px 6px;
     }
     .survey.survey--promo .promo-split {
       gap: 10px;
