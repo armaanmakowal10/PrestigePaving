@@ -55,7 +55,7 @@ export const BEFORE_AFTER_PAIRS = [
 /** Update with your live contact details */
 export const PHONE_DISPLAY = '(905) 261-6800';
 export const PHONE_TEL = '19052616800';
-export const EMAIL = 'info@prestigepavingsolutions.ca';
+export const EMAIL = 'prestigeps10@gmail.com';
 
 /**
  * URL for files in /public (e.g. public/media/...).

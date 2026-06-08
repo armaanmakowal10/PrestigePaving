@@ -99,10 +99,11 @@ export default function About() {
               <h5>Service area</h5>
               <ul>
                 <li><a href="#">Toronto</a></li>
-                <li><a href="#">Mississauga</a></li>
-                <li><a href="#">Brampton</a></li>
+                <li><a href="#">Durham</a></li>
+                <li><a href="#">Bowmanville</a></li>
                 <li><a href="#">Vaughan</a></li>
                 <li><a href="#">Markham</a></li>
+                <li><a href="#">Elsewhere in GTA</a></li>
               </ul>
             </div>
             <div>
