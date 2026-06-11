@@ -169,13 +169,33 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
 
   React.useEffect(() => {
     if (open) {
-      const prevBody = document.body.style.overflow;
+      // iOS Safari ignores overflow:hidden on body once an input is focused,
+      // so the page behind the overlay scrolls instead of the survey content.
+      // Pinning the body with position:fixed is the only lock it respects.
+      const scrollY = window.scrollY;
+      const { style } = document.body;
+      const prev = {
+        position: style.position,
+        top: style.top,
+        left: style.left,
+        right: style.right,
+        width: style.width,
+      };
       const prevHtml = document.documentElement.style.overflow;
-      document.body.style.overflow = 'hidden';
+      style.position = 'fixed';
+      style.top = `-${scrollY}px`;
+      style.left = '0';
+      style.right = '0';
+      style.width = '100%';
       document.documentElement.style.overflow = 'hidden';
       return () => {
-        document.body.style.overflow = prevBody;
+        style.position = prev.position;
+        style.top = prev.top;
+        style.left = prev.left;
+        style.right = prev.right;
+        style.width = prev.width;
         document.documentElement.style.overflow = prevHtml;
+        window.scrollTo(0, scrollY);
       };
     }
   }, [open]);

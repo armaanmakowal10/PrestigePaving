@@ -2655,6 +2655,8 @@
   /* ─── Survey (full-page) ─── */
   .survey {
     position: fixed; inset: 0; z-index: 100;
+    height: 100vh;
+    height: 100dvh;
     background: var(--bg);
     display: flex; flex-direction: column;
     opacity: 0; pointer-events: none;
@@ -2805,6 +2807,8 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     padding: 24px 48px 32px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
   /* Forward / back animations */
   .survey-page.enter-fwd { animation: surveyEnterFwd .55s cubic-bezier(.2,.8,.2,1) both; }
@@ -3111,10 +3115,16 @@
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
     }
+    /* flex-start + auto margins: centers when content fits, but keeps the top
+       scrollable when it overflows (justify-content:center clips it) */
     .survey.survey--promo .survey-page.no-scroll {
-      justify-content: center;
+      justify-content: flex-start;
       padding-top: 6px;
       padding-bottom: 8px;
+    }
+    .survey.survey--promo .survey-page.no-scroll .promo-split {
+      margin-top: auto;
+      margin-bottom: auto;
     }
   }
   @media (max-width: 860px) {
@@ -3146,13 +3156,16 @@
       padding: 8px 20px 12px;
     }
     .survey.survey--promo .survey-page.no-scroll {
-      padding: 32px 20px 6px;
+      padding: 32px 20px 20px;
     }
     .survey.survey--promo .promo-split {
       gap: 10px;
     }
+    /* Page scrolls on short phones, so the video no longer has to be crushed
+       to fit one viewport — give it a viewable height */
     .survey.survey--promo .promo-split-video {
-      max-height: min(140px, 22vh);
+      max-height: min(240px, 34vh);
+      height: auto;
     }
     .survey.survey--promo .promo-card .q-title {
       font-size: clamp(16px, 4vw, 24px) !important;
