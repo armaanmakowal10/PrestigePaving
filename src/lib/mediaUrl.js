@@ -27,26 +27,26 @@ export const OUR_PROCESS_VIDEO_SRC = '/media/hf_20260525_223504_3fd90248-0d38-47
 /** Before/after driveway photo pairs in /public/media */
 export const BEFORE_AFTER_PAIRS = [
   {
-    before: '/media/IMG_1327.png',
-    after: '/media/IMG_1331.png',
+    before: '/media/IMG_1327.jpg',
+    after: '/media/IMG_1331.jpg',
     altBefore: 'Driveway before sealing and paving',
     altAfter: 'Driveway after sealing and paving',
   },
   {
-    before: '/media/IMG_1226.png',
-    after: '/media/IMG_1235.png',
+    before: '/media/IMG_1226.jpg',
+    after: '/media/IMG_1235.jpg',
     altBefore: 'Driveway before restoration',
     altAfter: 'Driveway after restoration',
   },
   {
-    before: '/media/IMG_4625.png',
-    after: '/media/IMG_4626.png',
+    before: '/media/IMG_4625.jpg',
+    after: '/media/IMG_4626.jpg',
     altBefore: 'Driveway before sealing',
     altAfter: 'Driveway after sealing',
   },
   {
-    before: '/media/IMG_4627.png',
-    after: '/media/IMG_4629.png',
+    before: '/media/IMG_4627.jpg',
+    after: '/media/IMG_4629.jpg',
     altBefore: 'Driveway before paving',
     altAfter: 'Driveway after paving',
   },

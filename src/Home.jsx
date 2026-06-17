@@ -359,7 +359,7 @@ function StatsSectionVideo() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
         aria-label="Prestige Paving driveway sealing and paving work in the GTA"
       >
         <source src={mediaUrl(HERO_VIDEO_SRC)} type="video/quicktime" />
@@ -418,7 +418,7 @@ function OurProcessBlock() {
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             aria-label="Our driveway sealing and paving process"
           >
             <source src={mediaUrl(OUR_PROCESS_VIDEO_SRC)} type="video/mp4" />
@@ -631,6 +631,9 @@ function HeroCentered({ headline, openBooking }) {
           <span className="hero-split-title-line">Select Your</span>
           <span className="hero-split-title-line hero-split-title-line--accent">Service</span>
         </h1>
+        <p className="hero-split-lead">
+          Receive <strong>10% off</strong> when you complete your free quote request!
+        </p>
       </div>
       <div className="hero-svc-grid">
         {SERVICES.map((s) => {
@@ -648,9 +651,6 @@ function HeroCentered({ headline, openBooking }) {
           );
         })}
       </div>
-      <p className="hero-split-lead">
-        Receive <strong>10% off</strong> when you complete your free quote request!
-      </p>
       <ul className="hero-trust-list" aria-label="Why choose Prestige Paving">
         {[
           'Fully insured · GTA-wide service',
@@ -763,11 +763,19 @@ function Pollen({ count = 90, color = "#ffffff", staticity = 50, ease = 50, minA
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
+
+    // Skip the canvas work entirely where it costs the most and helps the least:
+    // touch devices (no cursor to react to), small screens, and reduced-motion.
+    const mq = (q) => window.matchMedia && window.matchMedia(q).matches;
+    if (mq('(prefers-reduced-motion: reduce)') || mq('(pointer: coarse)') || window.innerWidth < 768) {
+      return undefined;
+    }
+
     const ctx = canvas.getContext("2d");
 
     const resize = () => {
       const r = container.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       sizeRef.current = { w: r.width, h: r.height, dpr };
       canvas.width = r.width * dpr;
       canvas.height = r.height * dpr;
@@ -858,14 +866,33 @@ function Pollen({ count = 90, color = "#ffffff", staticity = 50, ease = 50, minA
     };
 
     resize();
-    draw();
+
+    // Only animate while the canvas is actually on screen, so off-screen
+    // instances don't burn CPU/GPU (there are several on the page).
+    let running = false;
+    const start = () => {
+      if (running) return;
+      running = true;
+      rafRef.current = requestAnimationFrame(draw);
+    };
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(rafRef.current);
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => { entries[0].isIntersecting ? start() : stop(); },
+      { rootMargin: '120px' }
+    );
+    io.observe(container);
 
     const ro = new ResizeObserver(resize);
     ro.observe(container);
-    window.addEventListener("mousemove", onMouse);
+    window.addEventListener("mousemove", onMouse, { passive: true });
 
     return () => {
-      cancelAnimationFrame(rafRef.current);
+      stop();
+      io.disconnect();
       ro.disconnect();
       window.removeEventListener("mousemove", onMouse);
     };

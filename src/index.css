@@ -1008,7 +1008,7 @@
     flex-direction: column;
     align-items: center;
     gap: 0.06em;
-    font-size: clamp(56px, 8.5vw, 104px);
+    font-size: clamp(44px, 6.8vw, 84px);
     font-weight: 800;
     line-height: 1.02;
     letter-spacing: -0.02em;
@@ -1044,8 +1044,8 @@
   }
   .hero-split-lead {
     display: inline-block;
-    margin: clamp(40px, 5.5vw, 64px) auto 0;
-    padding: clamp(14px, 1.8vw, 18px) clamp(26px, 4vw, 40px);
+    margin: clamp(14px, 2vw, 22px) auto 0;
+    padding: clamp(12px, 1.5vw, 16px) clamp(24px, 3.5vw, 36px);
     font-family: var(--display);
     font-size: clamp(12px, 1.4vw, 15px);
     line-height: 1.2;
@@ -3620,4 +3620,20 @@
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.05ms !important; }
+  }
+
+  /* ── Mobile / touch performance ───────────────────────────────────────────
+     backdrop-filter blur is one of the most expensive things a mobile GPU has
+     to recomposite while scrolling. The pinned call bar and the full-screen
+     overlays below already sit on solid/near-solid backgrounds, so dropping the
+     blur on touch devices keeps the look but removes the scroll jank. */
+  @media (hover: none) and (pointer: coarse) {
+    .call-bar,
+    .modal-backdrop {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    /* Make the call bar fully opaque now that it isn't frosting the page. */
+    .call-bar { background: var(--bg-elev); }
+    .modal-backdrop { background: rgba(5, 5, 8, 0.86); }
   }
