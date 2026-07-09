@@ -9,6 +9,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // set base: '/repo-name/' or VITE_BASE in .env.production — see Vite "Public Base Path".
 export default defineConfig({
   base: process.env.VITE_BASE || '/',
+  server: {
+    // Honor the port injected by the harness/preview (autoPort) when present.
+    port: process.env.PORT ? Number(process.env.PORT) : 5173,
+  },
   plugins: [react()],
   resolve: {
     alias: {

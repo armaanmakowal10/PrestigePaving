@@ -44,28 +44,28 @@ export function SiteNav({ scrolled = false, onClose }) {
             </Link>
           </div>
 
-          <div className="nav-right">
+          <div className="nav-actions">
             <a
-              className="nav-phone nav-phone--bar nav-phone--cta"
+              className="nav-phone-icon"
               href={`tel:${PHONE_TEL}`}
               aria-label={`Call us now at ${PHONE_DISPLAY}`}
+              title={PHONE_DISPLAY}
             >
               <PhoneIcon />
-              <span className="nav-phone-num">{PHONE_DISPLAY}</span>
             </a>
-          </div>
 
-          <button
-            type="button"
-            className="nav-hamburger"
-            onClick={() => setDrawerOpen(true)}
-            aria-label="Open menu"
-            aria-expanded={drawerOpen}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
+            <button
+              type="button"
+              className="nav-hamburger"
+              onClick={() => setDrawerOpen(true)}
+              aria-label="Open menu"
+              aria-expanded={drawerOpen}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
         </div>
       </nav>
 

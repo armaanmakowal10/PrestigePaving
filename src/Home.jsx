@@ -274,43 +274,6 @@ function BrandMark() {
 /** Share of video duration per step (must sum to 1). Steps 1–2 shorter; extra time on caution tape. */
 const PROCESS_STEP_WEIGHTS = [0.13, 0.17, 0.17, 0.23, 0.30];
 
-const PROCESS_FEATURES = [
-  {
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M3 7h11v9H3z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <path d="M14 10h4l3 3.5V16h-7" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <circle cx="7" cy="17.5" r="1.7" stroke="currentColor" strokeWidth="1.5"/>
-        <circle cx="17" cy="17.5" r="1.7" stroke="currentColor" strokeWidth="1.5"/>
-      </svg>
-    ),
-    title: 'Own equipment fleet',
-    desc: "We don't rely on rentals. Our fleet is ready to deploy.",
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="9" cy="8" r="3" stroke="currentColor" strokeWidth="1.5"/>
-        <circle cx="16.5" cy="9.5" r="2.3" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M3.5 18c.6-3 3-4.6 5.5-4.6S14 15 14.6 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        <path d="M14.5 18c.4-2 2-3.3 4-3.3s3.6 1.3 4 3.3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
-    title: 'In-house crew',
-    desc: 'Direct accountability and quality control from our own team.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M12 7v5l3.5 2.2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
-    title: 'Same-day assessment',
-    desc: 'Available upon request for urgent maintenance needs.',
-  },
-];
-
 const PROCESS_STEPS = [
   {
     n: '01',
@@ -369,9 +332,28 @@ function StatsSectionVideo() {
   );
 }
 
+// Rolling-reel geometry. The track's translateY math depends on these exact px values,
+// so heights are applied inline (not via CSS) to keep JS and layout in sync.
+const REEL_SLOT_H = 176; // fixed height of each step slot
+const REEL_VIEWPORT_H = 360; // reel window; active step centered, neighbours peek above/below
+
 function OurProcessBlock() {
   const [activeStepIdx, setActiveStepIdx] = React.useState(0);
+  // Mirror of activeStepIdx so the timeupdate handler can bail without re-rendering every tick.
+  const activeIdxRef = React.useRef(0);
   const videoRef = React.useRef(null);
+
+  // Cumulative start fraction of each step, derived from the existing weight map.
+  // Used to seek the video when a progress dot is clicked.
+  const stepStartFractions = React.useMemo(() => {
+    const out = [];
+    let acc = 0;
+    for (let i = 0; i < PROCESS_STEPS.length; i++) {
+      out.push(acc);
+      acc += PROCESS_STEP_WEIGHTS[i];
+    }
+    return out;
+  }, []);
 
   React.useEffect(() => {
     const video = videoRef.current;
@@ -384,18 +366,25 @@ function OurProcessBlock() {
       const { duration, currentTime } = video;
       if (!duration || Number.isNaN(duration)) return;
 
+      let idx = PROCESS_STEPS.length - 1;
       let elapsed = 0;
       for (let i = 0; i < PROCESS_STEPS.length; i++) {
         const stepEnd = elapsed + duration * PROCESS_STEP_WEIGHTS[i];
         if (currentTime < stepEnd) {
-          setActiveStepIdx(i);
-          return;
+          idx = i;
+          break;
         }
         elapsed = stepEnd;
       }
-      setActiveStepIdx(PROCESS_STEPS.length - 1);
+
+      // Only update state when the active step actually changes.
+      if (idx !== activeIdxRef.current) {
+        activeIdxRef.current = idx;
+        setActiveStepIdx(idx);
+      }
     };
 
+    // `seeked` fires on scrub — the reel snaps straight to the correct step.
     video.addEventListener('timeupdate', syncStepToVideo);
     video.addEventListener('seeked', syncStepToVideo);
     video.addEventListener('loadedmetadata', syncStepToVideo);
@@ -406,6 +395,20 @@ function OurProcessBlock() {
       video.removeEventListener('loadedmetadata', syncStepToVideo);
     };
   }, []);
+
+  const seekToStep = (i) => {
+    const video = videoRef.current;
+    if (!video) return;
+    const dur = video.duration;
+    if (!dur || Number.isNaN(dur)) return;
+    // Land just inside the step window rather than on its exact boundary.
+    video.currentTime = Math.min(dur - 0.05, stepStartFractions[i] * dur + 0.02);
+    if (video.paused) video.play().catch(() => {});
+  };
+
+  // Translate the reel so the active step sits centered in the viewport.
+  const trackY = REEL_VIEWPORT_H / 2 - (activeStepIdx + 0.5) * REEL_SLOT_H;
+  const activeStep = PROCESS_STEPS[activeStepIdx];
 
   return (
     <div className="our-process-split" data-reveal>
@@ -424,69 +427,60 @@ function OurProcessBlock() {
             <source src={mediaUrl(OUR_PROCESS_VIDEO_SRC)} type="video/mp4" />
           </video>
         </div>
-        <div className="process-features">
-          {PROCESS_FEATURES.map((f) => (
-            <div key={f.title} className="process-feature">
-              <span className="process-feature-icon" aria-hidden="true">{f.icon}</span>
-              <div className="process-feature-body">
-                <h4>{f.title}</h4>
-                <p>{f.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
       <div className="our-process-copy">
         <p className="our-process-intro">
           Every seal job follows the same careful process — from a spotless surface to a protected, finished driveway.
         </p>
-        <div className="our-process-steps" aria-live="polite">
-          {PROCESS_STEPS.map((step, i) => (
+        <div className="proc-reel-wrap">
+          <div className="proc-progress" role="tablist" aria-label="Process steps">
+            {PROCESS_STEPS.map((step, i) => (
+              <button
+                key={step.n}
+                type="button"
+                className={`proc-progress-dot${i === activeStepIdx ? ' is-active' : ''}`}
+                role="tab"
+                aria-selected={i === activeStepIdx}
+                aria-label={`Step ${i + 1}: ${step.title}`}
+                onClick={() => seekToStep(i)}
+              />
+            ))}
+          </div>
+          <div className="proc-reel" style={{ height: REEL_VIEWPORT_H }}>
             <div
-              key={step.n}
-              className={`process-step${i === activeStepIdx ? ' is-active' : ''}`}
-              aria-current={i === activeStepIdx ? 'step' : undefined}
+              className="proc-reel-track"
+              style={{ transform: `translateY(${trackY}px)` }}
             >
-              <span className="process-num">{step.n}</span>
-              <div className="process-body">
-                <h4>{step.title}</h4>
-                <p>{step.desc}</p>
-              </div>
+              {PROCESS_STEPS.map((step, i) => {
+                const isActive = i === activeStepIdx;
+                const delta = Math.abs(i - activeStepIdx);
+                const opacity = isActive ? 1 : delta === 1 ? 0.22 : 0;
+                return (
+                  <div
+                    key={step.n}
+                    className={`proc-reel-step${isActive ? ' is-active' : ''}`}
+                    style={{
+                      height: REEL_SLOT_H,
+                      opacity,
+                      transform: `scale(${isActive ? 1 : 0.95})`,
+                    }}
+                    aria-hidden={!isActive}
+                  >
+                    <span className="proc-reel-num">{step.n}</span>
+                    <div className="proc-reel-copy">
+                      <h4 className="proc-reel-title">{step.title}</h4>
+                      <p className="proc-reel-desc">{step.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          ))}
+          </div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-const TRUST_STRIP_ITEMS = [
-  { icon: 'cert', text: 'Free on-site quotes' },
-  { icon: 'shield', text: 'Fully insured · GTA' },
-  { icon: 'star', text: '4.9 / 5 customer rating' },
-  { icon: 'clock', text: 'Fast scheduling · Mon–Sat' },
-  { icon: 'cert', text: 'Driveway sealing specialists' },
-  { icon: 'shield', text: 'Premium sealers & asphalt' },
-];
-
-function TrustCarousel() {
-  const track = [...TRUST_STRIP_ITEMS, ...TRUST_STRIP_ITEMS];
-
-  return (
-    <div className="trust-carousel" aria-label="Trust badges">
-      <div className="trust-carousel-track">
-        {track.map((item, i) => {
-          const Ico = Icon[item.icon];
-          return (
-            <div
-              key={`${item.text}-${i}`}
-              className="trust-item"
-              aria-hidden={i >= TRUST_STRIP_ITEMS.length ? true : undefined}
-            >
-              <Ico /> {item.text}
-            </div>
-          );
-        })}
+        {/* Announce the active step to assistive tech without re-animating it. */}
+        <p className="sr-only" aria-live="polite">
+          {activeStep ? `Step ${activeStepIdx + 1} of ${PROCESS_STEPS.length}: ${activeStep.title}` : ''}
+        </p>
       </div>
     </div>
   );
@@ -651,21 +645,6 @@ function HeroCentered({ headline, openBooking }) {
           );
         })}
       </div>
-      <ul className="hero-trust-list" aria-label="Why choose Prestige Paving">
-        {[
-          'Fully insured · GTA-wide service',
-          'Free on-site quote — no obligation',
-          '500+ driveways sealed · 4.9 ★ rated',
-        ].map((item) => (
-          <li key={item} className="hero-trust-item">
-            <svg className="hero-trust-check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.6" />
-              <path d="M6 10.5l2.6 2.5L14 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
@@ -1219,9 +1198,6 @@ function Home() {
           <div className="container">
             <HeroBody headline={headline} openBooking={openBooking} />
           </div>
-        </section>
-        <section className="trust">
-          <TrustCarousel />
         </section>
       </div>
 
