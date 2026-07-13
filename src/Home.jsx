@@ -27,7 +27,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 const HEADLINES = {
   precision: { lead: "Sealed with", em: "precision.", trail: " Built to last.", sub: "GTA driveway sealing and paving for homeowners who want results that last. Book online for a free on-site quote." },
   power: { lead: "Paving,", em: "done properly.", trail: "", sub: "From fresh asphalt to protective sealing, our crew delivers clean, durable driveways across the Greater Toronto Area. Book in 60 seconds." },
-  modern: { lead: "Protecting the GTA's", em: "driveways", trail: ".", sub: "Professional sealing, resurfacing, and repairs — premium materials and workmanship you can see from the curb." },
+  modern: { lead: "Protecting the GTA's", em: "driveways", trail: ".", sub: "Professional sealing, resurfacing, and repairs with premium materials and workmanship you can see from the curb." },
   trust: { lead: "The GTA's trusted", em: "paving", trail: " team.", sub: "Driveway sealing specialists. Fully insured. Free quotes on every job. Book online and we'll confirm your visit within one business day." },
 };
 
@@ -162,9 +162,9 @@ const SERVICES_LIST = [
   { id: 'sealing', n: '01', icon: 'shield', title: 'Driveway sealing', desc: 'Protect asphalt from sun, salt, and water. Deep-penetrating sealers that restore colour and extend pavement life.' },
   { id: 'paving',  n: '02', icon: 'reno',   title: 'Asphalt paving & resurfacing', desc: 'New driveways, overlays, and full resurfacing. Proper base prep and compaction for a smooth, long-lasting finish.' },
   { id: 'cracks',  n: '03', icon: 'alert',  title: 'Crack filling & patch repair', desc: 'Stop cracks before they become potholes. Hot-rubberized or cold-pour repairs matched to your driveway.' },
-  { id: 'commercial', n: '04', icon: 'panel', title: 'Commercial property', desc: 'Lots, laneways, and private roads — striping, sealing, and resurfacing with minimal downtime.' },
+  { id: 'commercial', n: '04', icon: 'panel', title: 'Commercial property', desc: 'Lots, laneways, and private roads: striping, sealing, and resurfacing with minimal downtime.' },
   { id: 'striping', n: '05', icon: 'panel', title: 'Line striping', desc: 'Crisp parking stall lines, arrows, and markings for lots, laneways, and private drives.' },
-  { id: 'other',   n: '06', icon: 'light',  title: 'Custom paving projects', desc: 'Walkways, pads, and specialty surfaces. Tell us what you need — we\'ll quote it on-site.' },
+  { id: 'other',   n: '06', icon: 'light',  title: 'Custom paving projects', desc: 'Walkways, pads, and specialty surfaces. Tell us what you need and we\'ll quote it on-site.' },
 ];
 
 // ─── Animated counter ───
@@ -283,7 +283,7 @@ const PROCESS_STEPS = [
   {
     n: '02',
     title: 'Blow off dirt',
-    desc: 'We blow off all dust, dirt, rocks, and debris — leaving a clean surface that is ready for sealing.',
+    desc: 'We blow off all dust, dirt, rocks, and debris, leaving a clean surface that is ready for sealing.',
   },
   {
     n: '03',
@@ -430,7 +430,7 @@ function OurProcessBlock() {
       </div>
       <div className="our-process-copy">
         <p className="our-process-intro">
-          Every seal job follows the same careful process — from a spotless surface to a protected, finished driveway.
+          Step by <em>Step</em>
         </p>
         <div className="proc-reel-wrap">
           <div className="proc-progress" role="tablist" aria-label="Process steps">
@@ -909,27 +909,27 @@ function useReveal() {
 const FAQ_ITEMS = [
   {
     q: "How often should I seal my driveway?",
-    a: "Most asphalt driveways in the GTA benefit from sealing every 2–3 years, depending on sun exposure, traffic, and winter salt. We'll inspect your pavement on-site and recommend the right schedule — never a one-size-fits-all push.",
+    a: "Most asphalt driveways in the GTA benefit from sealing every 2 to 3 years, depending on sun exposure, traffic, and winter salt. We'll inspect your pavement on-site and recommend the right schedule, never a one-size-fits-all push.",
   },
   {
     q: "What areas do you serve?",
-    a: "We serve the Greater Toronto Area — Toronto, Mississauga, Brampton, Vaughan, Markham, Richmond Hill, Oakville, Scarborough, and surrounding communities. Not sure if you're in range? Request a quote and we'll confirm.",
+    a: "We serve the Greater Toronto Area: Toronto, Mississauga, Brampton, Vaughan, Markham, Richmond Hill, Oakville, Scarborough, and surrounding communities. Not sure if you're in range? Request a quote and we'll confirm.",
   },
   {
     q: "Do you provide free quotes?",
     a: "Yes. Every booking includes a free, no-obligation on-site quote. We'll measure your driveway, assess condition, explain options (sealing vs. paving vs. repairs), and put a clear price in writing before any work starts.",
   },
   {
-    q: "Sealing vs. paving — which do I need?",
+    q: "Sealing vs. paving: which do I need?",
     a: "Sealing protects existing asphalt in good condition. Paving or resurfacing is for driveways with extensive cracking, potholes, or base failure. We'll walk you through both on-site so you don't pay for work you don't need.",
   },
   {
     q: "How long does driveway sealing take?",
-    a: "A typical residential driveway can be sealed in a few hours, with 24–48 hours cure time before driving on it. We schedule around weather and keep you updated if rain shifts the timeline.",
+    a: "A typical residential driveway can be sealed in a few hours, with 24 to 48 hours cure time before driving on it. We schedule around weather and keep you updated if rain shifts the timeline.",
   },
   {
     q: "Are you insured?",
-    a: "Yes — Prestige Paving Solutions is fully insured for residential and commercial work. Your property and our crew are protected on every job.",
+    a: "Yes, Prestige Paving Solutions is fully insured for residential and commercial work. Your property and our crew are protected on every job.",
   },
 ];
 
@@ -949,7 +949,7 @@ function FAQItem({ q, a, open, onToggle }) {
 
 const TESTIMONIALS = [
   {
-    quote: "Our driveway looked tired and grey — after sealing it looks brand new. They showed up on time, explained the process, and the price matched the quote exactly. Already recommended them to our neighbours.",
+    quote: "Our driveway looked tired and grey. After sealing it looks brand new. They showed up on time, explained the process, and the price matched the quote exactly. Already recommended them to our neighbours.",
     name: "Sarah M.",
     role: "Residential · Mississauga",
   },
@@ -959,7 +959,7 @@ const TESTIMONIALS = [
     role: "Commercial Property Manager",
   },
   {
-    quote: "Honest advice — they told us sealing was enough instead of pushing a full repave. Work was done in one day and they left the property clean. Will use them again when it's time to reseal.",
+    quote: "Honest advice: they told us sealing was enough instead of pushing a full repave. Work was done in one day and they left the property clean. Will use them again when it's time to reseal.",
     name: "David K.",
     role: "Residential · Vaughan",
   },
@@ -969,7 +969,7 @@ const TESTIMONIALS = [
     role: "Residential · Brampton",
   },
   {
-    quote: "Three contractors quoted our crack repair — Prestige was the only one who walked us through what was actually causing it. Fixed it right the first time, no upsell pressure.",
+    quote: "Three contractors quoted our crack repair. Prestige was the only one who walked us through what was actually causing it. Fixed it right the first time, no upsell pressure.",
     name: "Michael B.",
     role: "Residential · Oakville",
   },
@@ -1067,7 +1067,7 @@ function TestimonialsCarousel() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="testimonial"
-                aria-label={`${tItem.name} — read review on Google`}
+                aria-label={`${tItem.name}: read review on Google`}
               >
                 <blockquote className="testimonial-quote-text"><span className="testimonial-mark">"</span>{tItem.quote}<span className="testimonial-mark">"</span></blockquote>
                 <span className="testimonial-meta">
@@ -1117,7 +1117,7 @@ function FAQ() {
       <Pollen color="#0080e0" minAlpha={0.12} maxAlpha={0.42} count={100} />
       <div className="container">
         <div className="faq-head" data-reveal>
-          <span className="uplabel">— Frequently asked</span>
+          <span className="uplabel">Frequently asked</span>
           <h2 className="faq-title">Questions, <em>Answered</em></h2>
         </div>
         <div className="faq-list">
@@ -1224,7 +1224,7 @@ function Home() {
               <div className="stat">
                 <span className="label">Quote turnaround</span>
                 <span className="num"><Counter end={24} /><em>hr</em></span>
-                <span className="desc">From request to on-site visit — often same week in season.</span>
+                <span className="desc">From request to on-site visit, often same week in season.</span>
               </div>
               <div className="stat">
                 <span className="label">Customer rating</span>
@@ -1242,7 +1242,6 @@ function Home() {
         <Pollen color="#0080e0" minAlpha={0.12} maxAlpha={0.42} count={100} />
         <div className="container">
           <div className="our-process-head" data-reveal>
-            <span className="uplabel">— How We Work</span>
             <h2 className="our-process-title">Our <em>Process</em></h2>
           </div>
           <OurProcessBlock />
@@ -1254,10 +1253,10 @@ function Home() {
         <Pollen color="#0080e0" minAlpha={0.12} maxAlpha={0.42} count={100} />
         <div className="container">
           <div className="real-results-head" data-reveal>
-            <span className="uplabel">— Before &amp; After</span>
+            <span className="uplabel">Before &amp; After</span>
             <h2 className="real-results-title">Real <em>Results</em></h2>
             <p className="real-results-sub">
-              Real GTA driveways we&apos;ve sealed and restored — browse before-and-after photos
+              Real GTA driveways we&apos;ve sealed and restored. Browse before-and-after photos
               from recent projects.
             </p>
           </div>
@@ -1270,7 +1269,7 @@ function Home() {
         <Pollen color="#0080e0" minAlpha={0.12} maxAlpha={0.42} count={110} />
         <div className="container">
           <div className="testimonials-head" data-reveal>
-            <span className="uplabel">— Client Testimonials</span>
+            <span className="uplabel">Client Testimonials</span>
             <h2 className="testimonials-title">What Our <em>Clients</em> Say</h2>
             <div className="testimonials-stars" aria-label="4.9 out of 5 stars">
               {[0,1,2,3,4].map((i) => (
@@ -1291,7 +1290,7 @@ function Home() {
         <Pollen color="#0080e0" minAlpha={0.12} maxAlpha={0.42} count={100} />
         <div className="container">
           <div className="cta-card" data-reveal>
-            <span className="uplabel">— Ready when you are</span>
+            <span className="uplabel">Ready when you are</span>
             <h2 style={{ marginTop: 14 }}>A Driveway You&apos;re <em>Proud Of</em><br/>Book Your Free Quote</h2>
             <p>GTA service area · Free on-site quote on every booking · Fully insured · Sealing &amp; paving specialists.</p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -1316,7 +1315,7 @@ function Home() {
                 <BrandLogo />
               </a>
               <p className="footer-tag">
-                Don&apos;t delay, seal today — <em>the Prestige way!</em>
+                Don&apos;t delay, seal today, <em>the Prestige way!</em>
               </p>
             </div>
             <div>
@@ -1350,7 +1349,7 @@ function Home() {
                     <span className="footer-email-domain">@{EMAIL.split('@')[1]}</span>
                   </a>
                 </li>
-                <li style={{ color: 'var(--ink-faint)' }}>Mon – Sat · seasonal hours</li>
+                <li style={{ color: 'var(--ink-faint)' }}>Mon to Sat · seasonal hours</li>
                 <li style={{ color: 'var(--ink-faint)' }}>Greater Toronto Area</li>
               </ul>
             </div>

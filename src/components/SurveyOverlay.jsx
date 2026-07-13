@@ -231,7 +231,7 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
         return found ? found.t : id;
       };
       const locationLabel = data.location === 'other'
-        ? `Other — ${data.locationOther.trim()}`
+        ? `Other: ${data.locationOther.trim()}`
         : labelFor(S_AREAS, data.location);
       const payload = {
         _subject: 'New Prestige Paving quote request',
@@ -309,7 +309,7 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
         <div className="qstack">
           <div className="q-counter">Question 1 of {totalSteps}</div>
           <h2 className="q-title">What Can We <em>Do</em> For Your Driveway?</h2>
-          <p className="q-sub">Choose the service that fits best — we&apos;ll confirm details and provide a free on-site quote.</p>
+          <p className="q-sub">Choose the service that fits best. We&apos;ll confirm details and provide a free on-site quote.</p>
           <div className="q-options">
             {S_SERVICES.map((s) => (
               <button key={s.id} className={`q-opt${data.service === s.id ? ' selected' : ''}`}
@@ -327,7 +327,7 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
         <div className="qstack">
           <div className="q-counter">Question 2 of {totalSteps}</div>
           <h2 className="q-title">Where Is Your <em>Property?</em></h2>
-          <p className="q-sub">We serve the Greater Toronto Area — driveway sealing and paving across the GTA.</p>
+          <p className="q-sub">We serve the Greater Toronto Area with driveway sealing and paving across the GTA.</p>
           <div className="q-options three">
             {S_AREAS.map((a) => (
               <button key={a.id} className={`q-opt${data.location === a.id ? ' selected' : ''}`}
@@ -414,6 +414,14 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
                   {errors.phone && <div className="q-err" style={{ marginTop: 6 }}>{errors.phone}</div>}
                 </div>
               </div>
+              {/* Mobile-only submit inside the scroll flow so the on-screen keyboard can never trap it */}
+              <button type="button" className="btn btn-primary promo-submit-mobile"
+                      onClick={goNext} disabled={submitting}>
+                {submitting ? 'Sending…' : 'Get my free quote'}
+                {!submitting && (
+                  <svg className="arrow" width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5H13M13 5L9 1M13 5L9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                )}
+              </button>
             </div>
           </div>
           <div className="promo-split-right">
@@ -435,7 +443,7 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
         </div>
         <h2 className="q-title">Request <em>Received!</em></h2>
         <p className="q-sub" style={{ textAlign: 'center', margin: '0 auto' }}>
-          Thanks{data.email ? `, ${data.email.split('@')[0]}` : ''} — we&apos;ll reach out shortly with your free quote.
+          Thanks{data.email ? `, ${data.email.split('@')[0]}` : ''}. We&apos;ll reach out shortly with your free quote.
         </p>
         <span className="q-helper" style={{ marginTop: 16 }}>Returning you to the home page…</span>
       </div>
