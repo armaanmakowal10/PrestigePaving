@@ -143,10 +143,12 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
     requestAnimationFrame(scrollTop);
   }, [open, step, done]);
 
-  const [secondsLeft, setSecondsLeft] = React.useState(20 * 60);
+  const COUNTDOWN_SECONDS = 5 * 60;
+  const [secondsLeft, setSecondsLeft] = React.useState(COUNTDOWN_SECONDS);
   React.useEffect(() => {
-    if (!open) { setSecondsLeft(20 * 60); return; }
-    const id = setInterval(() => setSecondsLeft((s) => (s > 0 ? s - 1 : 0)), 1000);
+    if (!open) { setSecondsLeft(COUNTDOWN_SECONDS); return; }
+    // Count down, then loop back to the start instead of stopping at 0.
+    const id = setInterval(() => setSecondsLeft((s) => (s > 1 ? s - 1 : COUNTDOWN_SECONDS)), 1000);
     return () => clearInterval(id);
   }, [open]);
   const mm = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
@@ -375,7 +377,7 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
           <div className="promo-split-left">
             <div className="promo-card">
               <span className="promo-stamp promo-stamp--countdown">Limited Time Only! · {mm}:{ss}</span>
-              <h2 className="q-title">Claim Your <em className="plain">10% Discount</em> On Driveway Services</h2>
+              <h2 className="q-title">Claim Your <em className="plain">$75 Off</em> On Driveway Services</h2>
               <div className="promo-bullets">
                 <div className="promo-bullet">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3L13 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
