@@ -1847,11 +1847,11 @@
   .stats::before {
     content: "";
     position: absolute;
-    top: 62px;
+    top: 30px;
     left: 50%;
     transform: translateX(-50%);
     width: min(1100px, 88%);
-    height: 3px;
+    height: 6px;
     border-radius: 3px;
     background: linear-gradient(
       to right,

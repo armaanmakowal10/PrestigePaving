@@ -582,32 +582,6 @@ function RealResultsCarousel({ pairs }) {
   );
 }
 
-// ─── Hero background slideshow ───
-const HERO_BG_SLIDES = [
-  { src: mediaUrl('/media/pavement-marking-guide.jpg') },
-  { src: mediaUrl('/media/nacsupplyinc-seotool-52134-howasealcoat-blogbanner3_2048x.jpg') },
-  { src: mediaUrl('/media/blog-4-commercial-paving-repair.jpg') },
-  { src: mediaUrl('/media/asphalt-paving-guide.jpg') },
-  { src: mediaUrl('/media/20190330_115127-e1554151664764.jpg') },
-];
-
-function HeroSlideshow({ activeIdx }) {
-  return (
-    <div className="hero-slides" aria-hidden="true">
-      {HERO_BG_SLIDES.map((s, i) => (
-        <div
-          key={s.src}
-          className={`hero-slide${s.bgPosition ? ' hero-slide--focus-top' : ''}${i === activeIdx ? ' active' : ''}`}
-          style={{
-            backgroundImage: `url(${s.src})`,
-            ...(s.bgPosition ? { backgroundPosition: s.bgPosition } : {}),
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
 // ─── Hero variants ───
 function HeroCentered({ headline, openBooking }) {
   const SERVICES = [
@@ -626,7 +600,7 @@ function HeroCentered({ headline, openBooking }) {
           <span className="hero-split-title-line hero-split-title-line--accent">Service</span>
         </h1>
         <p className="hero-split-lead">
-          Receive <strong>10% off</strong> when you complete your free quote request!
+          Receive <strong>$75 off</strong> when you complete your free quote request!
         </p>
       </div>
       <div className="hero-svc-grid">
@@ -1117,8 +1091,7 @@ function FAQ() {
       <Pollen color="#0080e0" minAlpha={0.12} maxAlpha={0.42} count={100} />
       <div className="container">
         <div className="faq-head" data-reveal>
-          <span className="uplabel">Frequently asked</span>
-          <h2 className="faq-title">Questions, <em>Answered</em></h2>
+          <h2 className="faq-title">Frequently Asked <em>Questions</em></h2>
         </div>
         <div className="faq-list">
           {FAQ_ITEMS.map((item, i) => (
@@ -1141,7 +1114,6 @@ function Home() {
   const [bookingOpen, setBookingOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
   const [showCallBar, setShowCallBar] = React.useState(false);
-  const [slideIdx, setSlideIdx] = React.useState(0);
 
   React.useEffect(() => {
     const b = document.body;
@@ -1165,21 +1137,6 @@ function Home() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  React.useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-    const id = setInterval(() => {
-      setSlideIdx((i) => (i + 1) % HERO_BG_SLIDES.length);
-    }, 6000);
-    return () => clearInterval(id);
-  }, []);
-
-  React.useEffect(() => {
-    HERO_BG_SLIDES.forEach((s) => {
-      const img = new Image();
-      img.src = s.src;
-    });
-  }, []);
-
   const headline = HEADLINES[t.headline] || HEADLINES.precision;
 
   let HeroBody = HeroCentered;
@@ -1191,7 +1148,6 @@ function Home() {
   return (
     <React.Fragment>
       <div className="hero-shell">
-        <HeroSlideshow activeIdx={slideIdx} />
         <div className="hero-veil" aria-hidden="true" />
         <SiteNav scrolled={scrolled} />
         <section className={`hero ${heroLayoutClass}`}>
