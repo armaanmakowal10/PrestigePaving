@@ -1102,7 +1102,7 @@ function Home() {
                 </svg>
               </button>
               <div className="hero-trust-row">
-                {['Fully Insured', 'Two Full Coats, Every Time', '500+ Driveways Sealed'].map((item) => (
+                {['Fully Insured', 'Double Coat', 'Matte Finish', '500+ Driveways Sealed'].map((item) => (
                   <span key={item} className="hero-trust-item">
                     <span className="hero-trust-check" aria-hidden="true">
                       <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
