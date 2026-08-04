@@ -6,7 +6,7 @@ export const HERO_BG_VIDEO_SRC = '/media/hero-timelapse.mp4';
 export const HERO_BG_POSTER_SRC = '/media/hero-timelapse-poster.jpg';
 
 /** Site logo in /public/media */
-export const LOGO_SRC = '/media/prestige-paving-logo-transparent.png';
+export const LOGO_SRC = '/media/prestige-paving-logo-clean.png';
 
 /** Survey service step backgrounds in /public/media (slideshow) */
 export const SURVEY_SERVICE_BG_SRCS = [
