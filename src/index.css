@@ -1446,9 +1446,9 @@
   @media (max-width: 640px) {
     /* Shorter hero: tighter composition and, since the source video is
        landscape, a smaller cover-scale means noticeably less crop. */
-    .hero-shell { min-height: 68svh; }
-    .hero { padding: 108px 0 30px; }
-    .hero .container { padding-left: 14px; padding-right: 14px; }
+    .hero-shell { min-height: 82svh; }
+    .hero { padding: 120px 0 36px; }
+    .hero .container { padding-left: 12px; padding-right: 12px; }
     /* Reclaim the shrink-to-fit auto margins so the copy gets the full width */
     .hero .hero-content.hero-simple {
       width: 100%;
@@ -1459,9 +1459,9 @@
     /* Generous, evenly-weighted rhythm: title → button → trust marks */
     .hero-simple { gap: 30px; }
     .hero h1.hero-simple-title {
-      font-size: clamp(21px, 6.6vw, 27px);
+      font-size: clamp(20px, 6.9vw, 29px);
       gap: 0.2em;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.025em;
     }
     .hero-simple-cta {
       font-size: clamp(11px, 3.1vw, 13px);
@@ -1476,9 +1476,10 @@
       display: grid;
       grid-template-columns: auto auto;
       justify-content: center;
+      justify-items: center;
       column-gap: 26px;
       row-gap: 15px;
-      margin-top: 6px;
+      margin-top: 22px;
     }
     .hero-trust-item { font-size: 11.5px; letter-spacing: 0.055em; }
     .hero-trust-check { width: 17px; height: 17px; }
