@@ -1,8 +1,20 @@
 /** Hero background video in /public/media */
 export const HERO_VIDEO_SRC = '/media/IMG_1765.MOV';
 
+/** Hero section background video + poster in /public/media */
+export const HERO_BG_VIDEO_SRC = '/media/hero-timelapse.mp4';
+export const HERO_BG_POSTER_SRC = '/media/hero-timelapse-poster.jpg';
+
 /** Site logo in /public/media */
 export const LOGO_SRC = '/media/prestige-paving-logo-transparent.png';
+
+/** Survey service step backgrounds in /public/media (slideshow) */
+export const SURVEY_SERVICE_BG_SRCS = [
+  '/media/nacsupplyinc-seotool-52134-howasealcoat-blogbanner3_2048x.jpg',
+  '/media/pavement-marking-guide.jpg',
+  '/media/blog-4-commercial-paving-repair.jpg',
+  '/media/asphalt-paving-guide.jpg',
+];
 
 /** Survey location step backgrounds in /public/media (slideshow) */
 export const SURVEY_LOCATION_BG_SRCS = [

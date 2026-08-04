@@ -11,7 +11,7 @@ import {
 } from './components/tweaks-panel';
 import { SurveyOverlay } from './components/SurveyOverlay';
 import { SiteNav } from './components/SiteNav';
-import { PHONE_DISPLAY, PHONE_TEL, EMAIL, HERO_VIDEO_SRC, OUR_PROCESS_VIDEO_SRC, BEFORE_AFTER_PAIRS, mediaUrl } from './lib/mediaUrl';
+import { PHONE_DISPLAY, PHONE_TEL, EMAIL, HERO_VIDEO_SRC, HERO_BG_VIDEO_SRC, HERO_BG_POSTER_SRC, OUR_PROCESS_VIDEO_SRC, BEFORE_AFTER_PAIRS, mediaUrl } from './lib/mediaUrl';
 import { BrandLogo } from './lib/brand';
 
 const GOOGLE_REVIEWS_URL = '#';
@@ -110,50 +110,6 @@ const Icon = {
   phone: (p) => (
     <svg viewBox="0 0 16 16" fill="none" width="16" height="16" {...p}>
       <path d="M3 3.5c0-.8.7-1.5 1.5-1.5h2l1.2 3-1.6 1c1 2 2.4 3.4 4.4 4.4l1-1.6 3 1.2v2c0 .8-.7 1.5-1.5 1.5C7 14 2 9 2 4.5 2 4.2 2 3.8 3 3.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
-    </svg>
-  ),
-  sealCoating: (p) => (
-    <svg viewBox="0 0 44 44" fill="none" {...p}>
-      <rect x="7" y="28" width="30" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
-      <path d="M15 28V17c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v11" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
-      <path d="M22 9v6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-      <path d="M18 9h8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-      <path d="M9 37h26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.45"/>
-    </svg>
-  ),
-  lineStripping: (p) => (
-    <svg viewBox="0 0 44 44" fill="none" {...p}>
-      <rect x="6" y="8" width="32" height="28" rx="2" stroke="currentColor" strokeWidth="1.4"/>
-      <path d="M14 12v20M22 12v20M30 12v20" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeDasharray="3.5 5"/>
-    </svg>
-  ),
-  crackRepair: (p) => (
-    <svg viewBox="0 0 44 44" fill="none" {...p}>
-      <rect x="6" y="10" width="32" height="24" rx="2" stroke="currentColor" strokeWidth="1.4"/>
-      <path d="M11 30l5-7 4 3 5-9 4 5 4-8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M28 14l4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-      <circle cx="30" cy="16" r="2.5" stroke="currentColor" strokeWidth="1.2"/>
-    </svg>
-  ),
-  holeRepair: (p) => (
-    <svg viewBox="0 0 44 44" fill="none" {...p}>
-      <rect x="6" y="12" width="32" height="22" rx="2" stroke="currentColor" strokeWidth="1.4"/>
-      <ellipse cx="22" cy="27" rx="9" ry="5.5" stroke="currentColor" strokeWidth="1.4"/>
-      <path d="M14 27c2.5-2 5.5-2 8 0s5.5 2 8 0" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-      <path d="M12 18h20" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-    </svg>
-  ),
-  asphaltPaving: (p) => (
-    <svg viewBox="0 0 44 44" fill="none" {...p}>
-      <path d="M6 32h32" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-      <path d="M8 32V20l14-9 14 9v12" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
-      <path d="M8 26h28M8 20h28" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.55"/>
-    </svg>
-  ),
-  otherService: (p) => (
-    <svg viewBox="0 0 44 44" fill="none" {...p}>
-      <rect x="8" y="8" width="28" height="28" rx="4" stroke="currentColor" strokeWidth="1.4"/>
-      <path d="M16 22h12M22 16v12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
     </svg>
   ),
 };
@@ -302,6 +258,37 @@ const PROCESS_STEPS = [
   },
 ];
 
+function HeroVideoBg() {
+  const videoRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+    video.muted = true;
+    // Browsers defer autoplay while the tab is hidden, so retry on wake.
+    const tryPlay = () => { video.play().catch(() => {}); };
+    tryPlay();
+    document.addEventListener('visibilitychange', tryPlay);
+    return () => document.removeEventListener('visibilitychange', tryPlay);
+  }, []);
+
+  return (
+    <div className="hero-video-bg" aria-hidden="true">
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster={mediaUrl(HERO_BG_POSTER_SRC)}
+      >
+        <source src={mediaUrl(HERO_BG_VIDEO_SRC)} type="video/mp4" />
+      </video>
+    </div>
+  );
+}
+
 function StatsSectionVideo() {
   const videoRef = React.useRef(null);
 
@@ -334,8 +321,8 @@ function StatsSectionVideo() {
 
 // Rolling-reel geometry. The track's translateY math depends on these exact px values,
 // so heights are applied inline (not via CSS) to keep JS and layout in sync.
-const REEL_SLOT_H = 176; // fixed height of each step slot
-const REEL_VIEWPORT_H = 360; // reel window; active step centered, neighbours peek above/below
+const REEL_SLOT_H = 250; // fixed height of each step slot
+const REEL_VIEWPORT_H = 460; // reel window; active step centered, neighbours peek above/below
 
 function OurProcessBlock() {
   const [activeStepIdx, setActiveStepIdx] = React.useState(0);
@@ -429,9 +416,6 @@ function OurProcessBlock() {
         </div>
       </div>
       <div className="our-process-copy">
-        <p className="our-process-intro">
-          Step by <em>Step</em>
-        </p>
         <div className="proc-reel-wrap">
           <div className="proc-progress" role="tablist" aria-label="Process steps">
             {PROCESS_STEPS.map((step, i) => (
@@ -577,47 +561,6 @@ function RealResultsCarousel({ pairs }) {
         <p className="real-results-counter" aria-hidden="true">
           {index + 1} / {count}
         </p>
-      </div>
-    </div>
-  );
-}
-
-// ─── Hero variants ───
-function HeroCentered({ headline, openBooking }) {
-  const SERVICES = [
-    { id: 'seal-coating', t: 'Seal Coating', icon: 'sealCoating' },
-    { id: 'line-stripping', t: 'Line Stripping', icon: 'lineStripping' },
-    { id: 'crack-repair', t: 'Crack Repair', icon: 'crackRepair' },
-    { id: 'hole-repair', t: 'Hole Repair', icon: 'holeRepair' },
-    { id: 'asphalt-paving', t: 'Asphalt Paving', icon: 'asphaltPaving' },
-    { id: 'other', t: 'Other', icon: 'otherService' },
-  ];
-  return (
-    <div className="hero-content hero-split-content">
-      <div className="hero-split-head">
-        <h1 className="hero-split-title">
-          <span className="hero-split-title-line">Select Your</span>
-          <span className="hero-split-title-line hero-split-title-line--accent">Service</span>
-        </h1>
-        <p className="hero-split-lead">
-          Receive <strong>$75 off</strong> when you complete your free quote request!
-        </p>
-      </div>
-      <div className="hero-svc-grid">
-        {SERVICES.map((s) => {
-          const SvcIcon = Icon[s.icon];
-          return (
-            <button key={s.id} className="hero-loc hero-svc"
-                    onClick={() => openBooking({ service: s.id })}>
-              <span className="hero-svc-inner">
-                <span className="hero-svc-icon" aria-hidden="true">
-                  {SvcIcon ? <SvcIcon /> : null}
-                </span>
-                <span className="hero-loc-t">{s.t}</span>
-              </span>
-            </button>
-          );
-        })}
       </div>
     </div>
   );
@@ -1137,22 +1080,40 @@ function Home() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const headline = HEADLINES[t.headline] || HEADLINES.precision;
-
-  let HeroBody = HeroCentered;
-  let heroLayoutClass = 'layout-centered';
-
   const [prefill, setPrefill] = React.useState(null);
   const openBooking = (pre) => { setPrefill(pre || null); setBookingOpen(true); };
 
   return (
     <React.Fragment>
       <div className="hero-shell">
-        <div className="hero-veil" aria-hidden="true" />
+        <HeroVideoBg />
         <SiteNav scrolled={scrolled} />
-        <section className={`hero ${heroLayoutClass}`}>
+        <section className="hero layout-centered">
           <div className="container">
-            <HeroBody headline={headline} openBooking={openBooking} />
+            <div className="hero-content hero-simple">
+              <h1 className="hero-simple-title">
+                <span>Ontario&apos;s Leading</span>
+                <span>Seal Coating Company</span>
+              </h1>
+              <button type="button" className="hero-simple-cta" onClick={() => openBooking()}>
+                Claim $75 OFF your next seal now!
+                <svg className="arrow" width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+                  <path d="M1 6h13M14 6l-4-4M14 6l-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <div className="hero-trust-row">
+                {['Fully Insured', 'Two Full Coats, Every Time', '500+ Driveways Sealed'].map((item) => (
+                  <span key={item} className="hero-trust-item">
+                    <span className="hero-trust-check" aria-hidden="true">
+                      <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8.5l3 3L13 4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
       </div>

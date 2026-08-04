@@ -1,7 +1,7 @@
 // Survey overlay — full-page multi-step flow with animated page transitions.
 import React from 'react';
 import { BackgroundBeams } from '@/components/ui/background-beams';
-import { SURVEY_LOCATION_BG_SRCS, SURVEY_PROPERTY_BG_SRCS, SURVEY_PROMO_VIDEO_SRC, mediaUrl } from '@/lib/mediaUrl';
+import { SURVEY_SERVICE_BG_SRCS, SURVEY_LOCATION_BG_SRCS, SURVEY_PROPERTY_BG_SRCS, SURVEY_PROMO_VIDEO_SRC, mediaUrl } from '@/lib/mediaUrl';
 import { SiteNav } from '@/components/SiteNav';
 
 function useSurveyPhotoSlideshow(isActive, slideCount, intervalMs = 6500) {
@@ -123,7 +123,11 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
   const [errors, setErrors] = React.useState({});
   const [submitting, setSubmitting] = React.useState(false);
   const pageRef = React.useRef(null);
-  const showPhotoBg = open && !done && (step === 1 || step === 2);
+  const showPhotoBg = open && !done && (step === 0 || step === 1 || step === 2);
+  const serviceBgIndex = useSurveyPhotoSlideshow(
+    open && step === 0 && !done,
+    SURVEY_SERVICE_BG_SRCS.length,
+  );
   const locationBgIndex = useSurveyPhotoSlideshow(
     open && step === 1 && !done,
     SURVEY_LOCATION_BG_SRCS.length,
@@ -308,16 +312,15 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
   const renderStep = () => {
     if (step === 0) {
       return (
-        <div className="qstack">
+        <div className="qstack qstack--service">
           <div className="q-counter">Question 1 of {totalSteps}</div>
-          <h2 className="q-title">What Can We <em>Do</em> For Your Driveway?</h2>
-          <p className="q-sub">Choose the service that fits best. We&apos;ll confirm details and provide a free on-site quote.</p>
-          <div className="q-options">
+          <h2 className="q-title">Select Your <em>Service</em></h2>
+          <p className="q-sub">Pick the service that fits best. Every booking includes a free on-site quote and $75 off your request.</p>
+          <div className="q-options three">
             {S_SERVICES.map((s) => (
               <button key={s.id} className={`q-opt${data.service === s.id ? ' selected' : ''}`}
                       onClick={() => pickAndAdvance('service', s.id, true)}>
                 <span className="q-opt-t">{s.t}</span>
-                <span className="q-opt-d">{s.d}</span>
               </button>
             ))}
           </div>
@@ -456,6 +459,9 @@ export function SurveyOverlay({ open, onClose, onComplete, prefill }) {
     <div className={`survey${open ? ' open' : ''}${showPhotoBg ? ' survey--photo-bg' : ''}${step === 3 && !done ? ' survey--promo' : ''}`} role="dialog" aria-modal="true" aria-label="Get a free quote">
       <div className="survey-grid"></div>
 
+      {open && step === 0 && !done && (
+        <SurveyStepPhotoBg slides={SURVEY_SERVICE_BG_SRCS} index={serviceBgIndex} />
+      )}
       {open && step === 1 && !done && (
         <SurveyStepPhotoBg slides={SURVEY_LOCATION_BG_SRCS} index={locationBgIndex} />
       )}
