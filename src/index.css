@@ -1445,11 +1445,12 @@
      shorter shell so the landscape video is less extremely cropped */
   @media (max-width: 640px) {
     .hero-shell { min-height: 78svh; }
-    .hero { padding: 92px 0 36px; }
-    .hero-simple { gap: 15px; }
+    .hero { padding: 88px 0 40px; }
+    /* Generous, evenly-weighted rhythm: title → button → trust marks */
+    .hero-simple { gap: 34px; }
     .hero h1.hero-simple-title {
       font-size: clamp(21px, 6.6vw, 25px);
-      gap: 0.14em;
+      gap: 0.2em;
       letter-spacing: -0.015em;
     }
     .hero-simple-cta {
@@ -1464,9 +1465,9 @@
       display: grid;
       grid-template-columns: auto auto;
       justify-content: center;
-      column-gap: 22px;
-      row-gap: 10px;
-      margin-top: 2px;
+      column-gap: 24px;
+      row-gap: 15px;
+      margin-top: 8px;
     }
     .hero-trust-item { font-size: 11px; letter-spacing: 0.06em; }
     .hero-trust-check { width: 17px; height: 17px; }
