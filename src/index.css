@@ -1461,35 +1461,41 @@
     /* Let the long blue line wrap onto two rows instead of forcing it onto one —
        that cap was holding the type at ~28px. Breaks stay on the colour split. */
     .hero h1.hero-simple-title {
-      font-size: clamp(28px, 10.5vw, 44px);
+      font-size: clamp(25px, 9.1vw, 38px);
       gap: 0.06em;
       line-height: 1.05;
       letter-spacing: -0.03em;
     }
     .hero-simple-title span { text-wrap: balance; }
     .hero-simple-cta {
-      font-size: clamp(10.5px, 3.5vw, 15px);
+      font-size: clamp(10px, 3.35vw, 14px);
       letter-spacing: 0.02em;
-      padding: 21px clamp(13px, 3.5vw, 22px);
+      padding: 17px clamp(12px, 3.35vw, 20px);
       gap: clamp(6px, 1.8vw, 9px);
       text-align: center;
       line-height: 1.35;
       white-space: nowrap;
     }
-    /* One centred column: the two-column grid capped the type at ~12px */
     .hero-trust-row {
       display: grid;
-      grid-template-columns: auto;
+      grid-template-columns: auto auto;
       justify-content: center;
-      justify-items: start;
-      row-gap: 13px;
-      margin-top: 24px;
+      justify-items: center;
+      column-gap: clamp(14px, 4.5vw, 22px);
+      row-gap: 14px;
+      margin-top: 22px;
     }
-    .hero-trust-item { font-size: clamp(12px, 4vw, 16px); letter-spacing: 0.03em; gap: 10px; }
-    .hero-trust-check { width: 22px; height: 22px; }
-    .hero-trust-check svg { width: 13px; height: 13px; }
-    /* Keep the bottom fade shallow so more of the driveway stays visible */
-    .hero-shell .hero-video-bg::after { height: 110px; }
+    .hero-trust-item { font-size: clamp(10px, 3.08vw, 12.8px); letter-spacing: 0.035em; gap: 8px; }
+    .hero-trust-check { width: 19px; height: 19px; }
+    .hero-trust-check svg { width: 11px; height: 11px; }
+  }
+  /* Below ~360px two columns no longer fit — fall back to a single column */
+  @media (max-width: 360px) {
+    .hero-trust-row {
+      grid-template-columns: auto;
+      justify-items: start;
+      row-gap: 11px;
+    }
   }
 
   /* Scrim behind the nav so the logo, phone, and menu stay legible over the video */
@@ -1541,6 +1547,11 @@
       var(--bg-elev) 96%,
       var(--bg-elev) 100%
     );
+  }
+  /* Keep the bottom fade shallow on phones so more of the driveway stays visible.
+     Must sit after the base rule above — same specificity, so order decides. */
+  @media (max-width: 640px) {
+    .hero-shell .hero-video-bg::after { height: 110px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .hero-shell .hero-video-bg video { display: none; }
