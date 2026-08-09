@@ -158,10 +158,14 @@
     position: relative;
     gap: clamp(16px, 3vw, 32px);
     min-height: 0;
-    padding: 24px 0 14px;
-    padding-top: max(24px, calc(env(safe-area-inset-top, 0px) + 12px));
     pointer-events: auto;
     z-index: 1;
+  }
+  /* Sit lower in the frame so the logo/buttons clear the very top edge of the video.
+     Doubled-up selector: `.nav .container` sets `padding: 0 …` and would win otherwise. */
+  .nav .container.nav-inner {
+    padding-top: max(clamp(36px, 5vh, 56px), calc(env(safe-area-inset-top, 0px) + 24px));
+    padding-bottom: 14px;
   }
   .brand { display: flex; align-items: center; gap: 14px; pointer-events: auto; line-height: 0; }
   .brand-text {
@@ -223,8 +227,10 @@
   }
   .nav .brand-logo,
   .survey-head .brand-logo {
-    height: 64px;
-    max-width: min(360px, 42vw);
+    height: 72px;
+    max-width: min(400px, 46vw);
+    /* Lift the logo off the sky/video behind it */
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 22px rgba(0, 0, 0, 0.4));
   }
   .nav .brand,
   .survey-head .brand {
@@ -251,12 +257,13 @@
   @media (max-width: 720px) {
     .nav .brand-logo,
     .survey-head .brand-logo {
-      height: 48px;
-      max-width: min(240px, 62vw);
+      height: 56px;
+      max-width: min(260px, 64vw);
     }
-    .nav-inner {
-      padding: 18px 0 4px;
-      padding-top: max(18px, calc(env(safe-area-inset-top, 0px) + 10px));
+    /* Same treatment as desktop: sit lower so the logo/buttons clear the top of the video */
+    .nav .container.nav-inner {
+      padding-top: max(28px, calc(env(safe-area-inset-top, 0px) + 14px));
+      padding-bottom: 6px;
     }
     .nav-links,
     .nav-right {
@@ -635,11 +642,12 @@
     border-color: color-mix(in oklab, var(--accent) 35%, var(--line-strong));
   }
   body.theme-dark .nav-phone-icon {
-    border-color: rgba(0, 128, 224, 0.45);
-    background: rgba(0, 0, 0, 0.18);
+    border: 1.5px solid var(--accent);
+    background: rgba(0, 0, 0, 0.55);
     color: var(--accent-bright);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), 0 0 14px rgba(0, 128, 224, 0.35);
   }
-  body.theme-dark .nav-phone-icon:hover { background: rgba(0,0,0,0.32); border-color: var(--accent); }
+  body.theme-dark .nav-phone-icon:hover { background: rgba(0,0,0,0.72); border-color: var(--accent-bright); }
 
   .nav-hamburger {
     pointer-events: auto;
@@ -667,10 +675,11 @@
     transition: transform .25s;
   }
   body.theme-dark .nav-hamburger {
-    border-color: rgba(0, 128, 224, 0.45);
-    background: rgba(0, 0, 0, 0.18);
+    border: 1.5px solid var(--accent);
+    background: rgba(0, 0, 0, 0.55);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), 0 0 14px rgba(0, 128, 224, 0.35);
   }
-  body.theme-dark .nav-hamburger:hover { background: rgba(0,0,0,0.32); border-color: var(--accent); }
+  body.theme-dark .nav-hamburger:hover { background: rgba(0,0,0,0.72); border-color: var(--accent-bright); }
   body.theme-dark .nav-hamburger span { background: var(--accent-bright); }
   .nav.scrolled { border-bottom-color: var(--line); }
 
@@ -733,15 +742,15 @@
   @media (max-width: 720px) {
     .nav-hamburger,
     .nav-phone-icon {
-      width: 38px;
-      height: 38px;
+      width: 44px;
+      height: 44px;
     }
-    .nav-hamburger { gap: 4px; }
+    .nav-hamburger { gap: 5px; }
     .nav-hamburger span {
-      width: 16px;
+      width: 18px;
       height: 2px;
     }
-    .nav-phone-icon svg { width: 16px; height: 16px; }
+    .nav-phone-icon svg { width: 18px; height: 18px; }
   }
 
   /* ─── Nav drawer ─── */
@@ -896,7 +905,9 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: 100svh;
+    /* Match the background clip's 16:9 ratio so the full frame fits uncropped.
+       Content can still push the shell taller; `contain` letterboxes if it does. */
+    min-height: 56.25vw;
     overflow: hidden;
     background: var(--bg);
   }
@@ -1444,9 +1455,9 @@
   /* Mobile hero: single-line title rows, one-line CTA, tidy 2x2 trust grid,
      shorter shell so the landscape video is less extremely cropped */
   @media (max-width: 640px) {
-    /* Shorter hero: tighter composition and, since the source video is
-       landscape, a smaller cover-scale means noticeably less crop. */
-    .hero-shell { min-height: 82svh; }
+    /* On phones the 16:9 clip is far shorter than the copy needs, so let the
+       content set the height and the video sit letterboxed inside it. */
+    .hero-shell { min-height: auto; }
     .hero { padding: 120px 0 36px; }
     .hero .container { padding-left: 12px; padding-right: 12px; }
     /* Reclaim the shrink-to-fit auto margins so the copy gets the full width */
@@ -1526,32 +1537,10 @@
   .hero-shell .hero-video-bg video {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    /* Anchor to the bottom of the frame so cropping trims sky, not the driveway */
-    object-position: center bottom;
-  }
-  /* Soft fade along the bottom edge only, so the video flows into the next section */
-  .hero-shell .hero-video-bg::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: clamp(130px, 20vh, 220px);
-    pointer-events: none;
-    background: linear-gradient(
-      180deg,
-      transparent 0%,
-      color-mix(in oklab, var(--bg-elev) 50%, transparent) 55%,
-      color-mix(in oklab, var(--bg-elev) 90%, transparent) 82%,
-      var(--bg-elev) 96%,
-      var(--bg-elev) 100%
-    );
-  }
-  /* Keep the bottom fade shallow on phones so more of the driveway stays visible.
-     Must sit after the base rule above — same specificity, so order decides. */
-  @media (max-width: 640px) {
-    .hero-shell .hero-video-bg::after { height: 110px; }
+    /* Show the whole frame — never crop. The shell is sized to the clip's 16:9
+       ratio below, so on desktop this fills edge to edge with no letterboxing. */
+    object-fit: contain;
+    object-position: center center;
   }
   @media (prefers-reduced-motion: reduce) {
     .hero-shell .hero-video-bg video { display: none; }
@@ -2092,25 +2081,6 @@
     border-bottom: 1px solid var(--line);
     padding: 170px 0 100px;
   }
-  /* Glowing accent line separating the hero from this section */
-  .stats::before {
-    content: "";
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    height: 2px;
-    border-radius: 2px;
-    background: linear-gradient(
-      to right,
-      transparent,
-      color-mix(in oklab, var(--accent-bright) 80%, transparent) 50%,
-      transparent
-    );
-    box-shadow: 0 0 22px 1px var(--accent-glow);
-    pointer-events: none;
-  }
   .stats-head {
     margin-bottom: clamp(32px, 4vw, 48px);
     justify-content: center;
@@ -2623,7 +2593,8 @@
   .cta-card p { color: var(--ink-dim); font-size: 17px; max-width: 540px; margin: 0 auto 36px; line-height: 1.55; }
   @media (max-width: 720px) { .cta-card { padding: 56px 28px; } }
 
-  /* ─── Pollen background (process, results, testimonials, FAQ, CTA) ─── */
+  /* ─── Pollen background (stats, process, results, testimonials, FAQ, CTA) ─── */
+  .stats,
   .our-process,
   .real-results,
   .testimonials, .faq, .cta-section {
@@ -2631,6 +2602,7 @@
     overflow: hidden;
     isolation: isolate;
   }
+  .stats > .container,
   .our-process > .container,
   .real-results > .container,
   .testimonials > .container,

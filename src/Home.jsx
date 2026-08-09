@@ -1120,6 +1120,7 @@ function Home() {
 
       {/* Stats */}
       <section className="stats" id="services">
+        <Pollen color="#0080e0" minAlpha={0.12} maxAlpha={0.42} count={100} />
         <div className="container">
           <div className="section-head stats-head" data-reveal>
             <div>
