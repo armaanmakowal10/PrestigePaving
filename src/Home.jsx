@@ -260,8 +260,14 @@ const PROCESS_STEPS = [
 
 function HeroVideoBg() {
   const videoRef = React.useRef(null);
+  // Reduced motion: render the poster still instead of playing the video.
+  const [reducedMotion] = React.useState(
+    () => typeof window !== 'undefined'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 
   React.useEffect(() => {
+    if (reducedMotion) return undefined;
     const video = videoRef.current;
     if (!video) return undefined;
     video.muted = true;
@@ -270,21 +276,26 @@ function HeroVideoBg() {
     tryPlay();
     document.addEventListener('visibilitychange', tryPlay);
     return () => document.removeEventListener('visibilitychange', tryPlay);
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <div className="hero-video-bg" aria-hidden="true">
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        poster={mediaUrl(HERO_BG_POSTER_SRC)}
-      >
-        <source src={mediaUrl(HERO_BG_VIDEO_SRC)} type="video/mp4" />
-      </video>
+      {reducedMotion ? (
+        <img src={mediaUrl(HERO_BG_POSTER_SRC)} alt="" />
+      ) : (
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={mediaUrl(HERO_BG_POSTER_SRC)}
+        >
+          <source src={mediaUrl(HERO_BG_VIDEO_SRC)} type="video/mp4" />
+        </video>
+      )}
+      <div className="hero-video-overlay" />
     </div>
   );
 }
@@ -1092,17 +1103,18 @@ function Home() {
           <div className="container">
             <div className="hero-content hero-simple">
               <h1 className="hero-simple-title">
-                <span>Ontario&apos;s Leading</span>
-                <span>Seal Coating Company</span>
+                <span>500+ Driveways Sealed</span>
+                <span>Across the GTA</span>
               </h1>
+              <p className="hero-simple-sub">Professional asphalt sealing for Durham Region and the GTA.</p>
               <button type="button" className="hero-simple-cta" onClick={() => openBooking()}>
-                Claim $75 OFF your next seal now!
+                Get $75 OFF your driveway
                 <svg className="arrow" width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
                   <path d="M1 6h13M14 6l-4-4M14 6l-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
               <div className="hero-trust-row">
-                {['Fully Insured', 'Double Coat', 'Matte Finish', '500+ Driveways Sealed'].map((item) => (
+                {['Fully Insured', 'Double Coat', 'Matte Finish', 'Free Quotes'].map((item) => (
                   <span key={item} className="hero-trust-item">
                     <span className="hero-trust-check" aria-hidden="true">
                       <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
